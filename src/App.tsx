@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div className='app'>
-      <Header />
+      <Header title='Home' />
       <div>
         <Routes>
           <Route path='/login' element={<LoginPage />} />

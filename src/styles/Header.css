@@ -1,0 +1,40 @@
+@import "../index.css";
+
+.header {
+  width: 1720px; /* (1720 / 1920 * 100 = 89.6vw) */
+  height: 70px;
+  background-color: var(--primary-orange-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 100px;
+  box-sizing: border-box;
+  padding: 0px 50px;
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.header-title {
+  color: var(--black);
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+}
+
+.header-icon-left {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
+
+.header-icon-right {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
