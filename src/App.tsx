@@ -7,11 +7,11 @@ import LoginPage from './pages/LoginPage'
 function App() {
 
   return (
-    <div>
+    <div className='app'>
       <Header />
       <div>
         <Routes>
-          <Route path='/' element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage />} />
           <Route path='/' element={<HomePage />} />
         </Routes>
       </div>
