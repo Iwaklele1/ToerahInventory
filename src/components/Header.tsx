@@ -5,8 +5,8 @@ import profileIcon from "../assets/ProfileIcon.png";
 
 interface HeaderProps {
   title: string;
-  onMenuClick?: () => void;
-  onProfileClick?: () => void;
+  onMenuClick: () => void;
+  onProfileClick: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ title, onMenuClick, onProfileClick }) => {
