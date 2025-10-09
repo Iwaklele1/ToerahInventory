@@ -1,22 +1,20 @@
-import './App.css'
-import Header from './components/Header'
-import { Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import LoginPage from './pages/LoginPage'
+// di src/App.tsx
+import { Routes, Route } from 'react-router-dom';
+import Homepage from './pages/HomePage';
+import Header from './components/Header';
+
 
 function App() {
-
   return (
     <div>
       <Header />
       <div>
         <Routes>
-          <Route path='/' element={<LoginPage />} />
-          <Route path='/' element={<HomePage />} />
+          <Route path="/" element={<Homepage />} />
         </Routes>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
