@@ -3,7 +3,8 @@ import "../styles/Sidebar.css";
 import dashboardIcon from "../assets/DashboardIcon.png";
 import inventoryicon from "../assets/InventoryIcon.png";
 import memberIcon from "../assets/MemberIcon.png";
-import toerahLogo from "../assets/ToerahLogo.png";
+// import toerahLogo from "../assets/ToerahLogo.png";
+import toerahLogo from "../assets/ToerahLogoNoBG.png";
 import { Link } from "react-router-dom";
 
 interface SidebarProps {
@@ -19,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <aside className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <img src={toerahLogo} alt="Toerah" className="sidebar-logo" />
-          <h2 className="sidebar-title">Toerah Inventory</h2>
+          {/* <h2 className="sidebar-title">Toerah Inventory</h2> */}
 
           <nav className="sidebar-menu">
             <Link
