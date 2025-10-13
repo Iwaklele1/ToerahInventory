@@ -19,8 +19,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       <aside className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
+          
           <img src={toerahLogo} alt="Toerah" className="sidebar-logo" />
-          {/* <h2 className="sidebar-title">Toerah Inventory</h2> */}
+            <h2 className="sidebar-title">Toerah Inventory</h2>
 
           <nav className="sidebar-menu">
             <Link
