@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../styles/Sidebar.css";
 import dashboardIcon from "../assets/DashboardIcon.png";
 import inventoryicon from "../assets/InventoryIcon.png";
@@ -6,6 +6,7 @@ import memberIcon from "../assets/MemberIcon.png";
 // import toerahLogo from "../assets/ToerahLogo.png";
 import toerahLogo from "../assets/ToerahLogoNoBG.png";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,6 +14,14 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+
+  const { logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    onClose();
+  };
+
   return (
     <>
       {isOpen && <div className="sidebar-overlay" onClick={onClose}></div>}
@@ -59,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </Link>
           </nav>
         </div>
-        <button className="logout-btn" onClick={onClose}>
+        <button className="logout-btn" onClick={handleLogout}>
           Log Out
         </button>
       </aside>

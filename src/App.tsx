@@ -9,9 +9,11 @@ import DetailInventoryPage from "./pages/DetailInventoryPage";
 import MemberPage from "./pages/MemberPage";
 import ProtectedRoute from "./route/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
+import Profile from "./components/Profile";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const location = useLocation();
 
   // Tentukan judul berdasarkan path
@@ -28,22 +30,37 @@ function App() {
     }
   };
 
+  const mockUser = {
+    username: "Google Person Account",
+    email: "googleaccount1@gmail.com",
+    password: "Admin1234",
+    telegramId: "1198009289990",
+    phone: "089211245598",
+  };
+
   const isLoginPage = location.pathname === "/login";
 
   return (
     <>
-      <div className="app">
         {!isLoginPage && (
           <>
+          <div className="app">
+
             <Header
               title={getTitle()}
               onMenuClick={() => setSidebarOpen(true)}
-              onProfileClick={() => console.log("Profile clicked")}
+              onProfileClick={() => setProfileOpen(true)}
             />
             <Sidebar
               isOpen={sidebarOpen}
               onClose={() => setSidebarOpen(false)}
             />
+            <Profile
+              isOpen={profileOpen}
+              onClose={() => setProfileOpen(false)}
+              user={mockUser}
+            />
+          </div>
           </>
         )}
 
@@ -80,7 +97,6 @@ function App() {
           {/* redirect tidak dikenal */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-      </div>
     </>
   );
 }

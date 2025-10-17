@@ -10,6 +10,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ title, onMenuClick, onProfileClick }) => {
+  
   return (
     <header className="header">
       <div className="header-left" onClick={onMenuClick}>
