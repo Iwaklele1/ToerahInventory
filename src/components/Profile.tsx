@@ -2,7 +2,13 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Profile.css";
-import { FaLock, FaPhone, FaTelegramPlane } from "react-icons/fa";
+import closeIcon from "../assets/CloseIcon.png";
+import profilePicture from "../assets/ProfilePicture.png"
+import emailIcon from "../assets/EmailIcon.png"
+import passwordIcon from "../assets/PasswordIcon.png"
+import telegramIcon from "../assets/TelegramIcon.png"
+import telephoneIcon from "../assets/TeleponIcon.png"
+import logoutIcon from "../assets/LogoutIcon.png"
 
 interface ProfileProps {
   isOpen: boolean;
@@ -28,10 +34,19 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, user }) => {
     <>
       {isOpen && <div className="profile-overlay" onClick={onClose}></div>}
 
-      <div className={`profile-sidebar ${isOpen ? "open" : ""}`}>
+      <div className={`profile ${isOpen ? "open" : ""}`}>
         <div className="profile-header">
-          <button className="close-btn" onClick={onClose}>×</button>
+          <img
+            src={closeIcon}
+            alt="close"
+            className="close-btn"
+            onClick={onClose}
+          />
           Profile
+        </div>
+
+        <div className="line">
+        <hr />
         </div>
 
         <div className="profile-content">
@@ -39,7 +54,9 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, user }) => {
             <>
               {/* Username section */}
               <div className="profile-section username-block">
-                <div className="icon"></div>
+                <div className="icon">
+                  <img src={profilePicture} alt="Profile" />
+                </div>
                 <div className="username-text">
                   <strong>Username</strong>
                   <span>{user.username}</span>
@@ -47,9 +64,11 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, user }) => {
               </div>
 
               {/* Info section */}
-              <div className="profile-section">
+              <div className="profile-section info-section">
                 <div className="info-row">
-                  <div className="icon"></div>
+                  <div className="icon">
+                    <img src={emailIcon} alt="Email" />
+                  </div>
                   <div>
                     <div className="label">Email</div>
                     <div className="value">{user.email}</div>
@@ -57,7 +76,9 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, user }) => {
                 </div>
 
                 <div className="info-row">
-                  <div className="icon"><FaLock /></div>
+                  <div className="icon">
+                    <img src={passwordIcon} alt="Password" />
+                  </div>
                   <div>
                     <div className="label">Password</div>
                     <div className="value">{user.password}</div>
@@ -65,7 +86,9 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, user }) => {
                 </div>
 
                 <div className="info-row">
-                  <div className="icon"><FaTelegramPlane /></div>
+                  <div className="icon">
+                    <img src={telegramIcon} alt="Telegram" />
+                  </div>
                   <div>
                     <div className="label">ID Telegram</div>
                     <div className="value">{user.telegramId}</div>
@@ -73,7 +96,9 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, user }) => {
                 </div>
 
                 <div className="info-row">
-                  <div className="icon"><FaPhone /></div>
+                  <div className="icon">
+                    <img src={telephoneIcon} alt="Telephone" />
+                  </div>
                   <div>
                     <div className="label">No Telepon</div>
                     <div className="value">{user.phone}</div>
@@ -85,7 +110,8 @@ const Profile: React.FC<ProfileProps> = ({ isOpen, onClose, user }) => {
         </div>
 
         <button className="logout-btn" onClick={handleLogout}>
-           Log Out
+          <img src={logoutIcon} alt="Logout" />
+          Log Out
         </button>
       </div>
     </>
