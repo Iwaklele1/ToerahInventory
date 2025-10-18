@@ -1,0 +1,727 @@
+/* ========== GLOBAL ========== */
+.detail-page-container {
+  display: flex;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  overflow-y: auto;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+  width: 441px;
+  height: 910px;
+  background: var(--white);
+  border-radius: 12px;
+  margin: 20px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: none;
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 0px;
+}
+
+/* Tombol Icon Sidebar (Reset Style Dasar) */
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 18px;
+  padding: 6px;
+  cursor: pointer;
+}
+.icon-btn:hover {
+  background: transparent;
+}
+
+/* Icon Khusus */
+.icon-search {
+  width: 50px;
+  height: 50px;
+  background: transparent !important;
+}
+
+.icon-search-bar {
+  width: 24px;
+  height: 24px;
+  background: transparent !important;
+}
+
+.icon-plus {
+  width: 50px;
+  height: 50px;
+  background: transparent !important;
+}
+
+.icon-edit {
+  width: 50px;
+  height: 50px;
+  background: transparent !important;
+}
+
+.icon-delete {
+  width: 18px;
+  height: 18px;
+  background: transparent !important;
+  filter: none;  
+}
+
+.icon-close {
+  width: 50px;
+  height: 50px;
+  background: transparent !important;
+}
+
+.icon-id {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  margin-right: 8px;
+  background: none;
+}
+
+.icon-product {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  margin-right: 8px;
+}
+
+.icon-checklist {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  margin-right: 8px;
+}
+
+
+.icon-stocked {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  margin-right: 8px;
+}
+
+
+.menu-btn,
+.add-btn,
+.search-toggle {
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.menu-btn:hover,
+.add-btn:hover,
+.search-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* Search Active Mode */
+.search-bar.active {
+  background-color: var(--white);
+  border-radius: 10px;
+  padding: 6px 10px;
+  width: 411px;
+  height: 50px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+}
+.search-bar.active input {
+  border: none;
+  outline: none;
+  flex: 1;
+}
+.search-bar .delete {
+  background: none !important;   /* hapus background */
+  border: none !important;       /* hapus border */
+  padding: 0;                    /* hilangkan jarak di dalam */
+  margin: 0;
+  cursor: pointer;               /* tetap bisa diklik */
+  display: flex;                 /* biar ikon center */
+  align-items: center;
+  justify-content: center;
+  outline: none;                 /* hilangkan garis fokus */
+  box-shadow: none;              /* hilangkan efek shadow */
+}
+
+/* Daftar Produk Sidebar */
+.product-list {
+  margin-top: 0;
+  width: 100%;
+  overflow-y: auto;
+  flex: 1;
+  font-size: 18px;
+
+}
+.product-list h4 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  background: var(--primary-orange-color);
+  color: var(--black);
+  padding: 15px 50px;
+  border-radius: 50px;
+  font-weight: 500;
+  margin-top: 0;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+  padding: 6px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.product-item:hover {
+  background: var(--tabel-hover);
+}
+.product-thumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.product-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.product-info-mini p {
+  margin: 0;
+  font-weight: 500;
+}
+.product-id {
+  font-size: 18px;
+  color: var(--black);
+}
+
+/* ========== MAIN CONTENT ========== */
+.detail-content {
+  flex: 1;
+  margin: 20px;
+  background: var(--white);
+  border-radius: 16px;
+  padding: 27px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  width: 1247px;
+  height: 910px;
+  overflow: hidden;
+}
+
+.table-container {
+  background-color: var(--white);
+  border-radius: 12px;
+  border-radius: 12px;
+  margin: 20px;
+  padding: 20px 28px;
+  display: flex;
+  flex-direction: column;
+  height: 90vh; /* batas tinggi layar biar gak melebihi viewport */
+}
+
+.add-vendor-btn {
+  margin-top: 16px;
+  background-color: var(--add-vendor-btn-color);
+  color: var(--white);
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+
+/* Header */
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--primary-orange-color);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Body */
+.detail-body {
+  display: flex;
+  margin-top: 20px;
+  gap: 24px;
+}
+.product-image {
+  width: 500px;
+  height: 500px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.product-info {
+  flex: 1;
+}
+.product-desc {
+  font-size: 24px;
+  color: var(--black);
+  line-height: 1.5;
+}
+.product-details {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Container luar biar ada border & radius */
+.tabs-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Wrapper tab */
+.tabs {
+  display: flex;
+  border: 2px solid var(--black);
+  border-radius: 50px;
+  overflow: hidden; /* biar pojoknya nyatu */
+}
+
+/* Tombol tab */
+.tab-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px 28px;
+  border: none;
+  background: var(--searchbar-input);
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Tab aktif */
+.tab-button.active {
+  background: var(--secondary-text-color);
+  color: var(--white);
+}
+
+/* Hover effect */
+.tab-button:hover:not(.active) {
+  background: var(--tabel-hover);
+}
+
+/* Biar tiap sisi nyatu rapi */
+.tab-button:first-child {
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border-top-right-radius: 40px;
+}
+
+.tab-button:last-child {
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+}
+
+/* Ikon */
+.icon-tab {
+  width: 20px;
+  height: 20px;
+  background: none !important;
+  filter: brightness(0) saturate(100%); /* biar warnanya nyatu */
+  transition: filter 0.25s ease;
+}
+
+/* Saat aktif, ubah ikon jadi putih */
+.tab-button.active .icon-tab {
+  filter: brightness(0) invert(1);
+}
+
+
+/* Ikon */
+.icon-user {
+  width: 24px;
+  height: 24px;
+  background: transparent !important;
+  flex-shrink: 0; /* biar ukuran ikon gak berubah */
+}
+
+/* Styling untuk header tabel (th) */
+/* ===== TABEL HEADER NYATU ===== */
+.table-container table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0; /* biar gak ada jarak antar kolom */
+  border: none;
+}
+
+thead {
+  background-color: var(--primary-orange-color); /* warna header (oranye kek di gambar) */
+  color: var(--black);
+}
+
+thead tr {
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+th {
+  font-weight: 600;
+  text-align: left;
+  padding: 14px 20px;
+  font-size: 18px;
+  border: none;
+  background: transparent; /* penting biar warna dari thead aja */
+}
+
+/* Radius pojok kiri & kanan biar bentuknya rounded kayak di gambar */
+thead tr:first-child th:first-child {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+thead tr:first-child th:last-child {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
+
+/* Styling untuk isi tabel (td) */
+td {
+  padding: 10px 16px;
+  border-bottom: 2px solid var(--black); /* garis pemisah antar baris */
+  font-size: 18px;
+  background-color: var(--white); /* biar tetap putih */
+}
+
+
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal utama */
+.add-vendor-modal {
+  background: var(--background-color);
+  width: 480px;
+  border-radius: 12px;
+  padding: 28px 32px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  animation: popIn 0.25s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Judul modal */
+.add-vendor-modal h3 {
+  color: #2f1a00;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+/* Search bar */
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 40px 10px 16px;
+  border: 2px solid #2F2418;
+  border-radius: 24px;
+  outline: none;
+  font-size: 14px;
+  background-color: var(--create-new-vendor);
+  color: #3c2a00;
+}
+
+.icon-search-modal {
+  position: absolute;
+  right: 14px;
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+/* Daftar vendor */
+.vendor-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.vendor-item {
+  padding: 10px 0;
+}
+
+.vendor-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-user-modal {
+  width: 22px;
+  height: 22px;
+  background: none !important;
+}
+
+.vendor-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.vendor-name {
+  font-size: 15px;
+  color: var(--black);
+  font-weight: 600;
+}
+
+.vendor-link {
+  font-size: 13px;
+  color: var(--vendorlink);
+}
+
+.vendor-item hr {
+  border: none;
+  border-bottom: 1px solid #bca688;
+  margin-top: 10px;
+}
+
+/* Footer bagian bawah modal */
+.modal-footer {
+  background: #fff8f0;
+  border-radius: 0 0 12px 12px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Tombol */
+.create-new-btn {
+  background: none;
+  color: #58190b;
+  font-weight: 600;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.create-new-btn:hover {
+  text-decoration: underline;
+}
+
+.cancel-btn {
+  background: #a93624;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #8d2b1e;
+}
+
+.icon-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* ========== FIX ICON ALIGNMENT IN MAIN CONTENT ========== */
+
+/* Bungkus baris detail info (ikon + teks) */
+.product-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 kolom sejajar */
+  gap: 20px 28px; /* jarak vertikal dan horizontal */
+  margin-top: 22px;
+  align-items: center; /* biar sejajar tengah vertikal */
+}
+
+/* Setiap pasangan ikon + teks */
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* jarak ikon ke teks */
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  font-size: 24px;
+    
+}
+
+/* Semua ikon di bagian detail agar proporsional */
+.detail-item img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  background: transparent !important;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Khusus ikon status biar badge-nya rapi */
+.status.low {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #e9a63a;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+/* Jika teks produk panjang, tetap sejajar tanpa meluber */
+.product-info .product-details span {
+  display: inline-block;
+  max-width: 300px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ================= MODAL CREATE VENDOR ================= */
+.create-vendor-modal {
+  background: #FFE6C2;
+  border-radius: 16px;
+  padding: 28px 36px;
+  width: 500px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  font-family: "Poppins", sans-serif;
+  color: #2f1a00;
+}
+
+.create-vendor-modal h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* Form group */
+.create-vendor-modal .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.create-vendor-modal label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #3e2a00;
+  margin-bottom: 6px;
+}
+
+/* Input field */
+.create-vendor-modal .input-field {
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1.8px solid #c3a677;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fff;
+}
+
+.create-vendor-modal .input-field:focus {
+  border-color: #e9a63a;
+  box-shadow: 0 0 4px rgba(233, 166, 58, 0.4);
+}
+
+/* Footer / Action buttons */
+.create-vendor-modal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+  background-color: #fff8ee;
+  padding: 18px;
+  border-radius: 0 0 12px 12px;
+}
+
+/* Cancel button */
+.create-vendor-modal .cancel-btn {
+  background: transparent;
+  border: 2px solid #b23a2f;
+  color: #b23a2f;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.create-vendor-modal .cancel-btn:hover {
+  background: #b23a2f;
+  color: #fff;
+}
+
+/* Create button */
+.create-vendor-modal .create-btn {
+  background: #3da851;
+  border: 2px solid #3da851;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.create-vendor-modal .create-btn:hover {
+  background: #2f8a42;
+  border-color: #2f8a42;
+}
