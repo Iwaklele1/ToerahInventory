@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import "../styles/Sidebar.css";
 import dashboardIcon from "../assets/DashboardIcon.png";
 import inventoryicon from "../assets/InventoryIcon.png";
@@ -6,7 +5,6 @@ import memberIcon from "../assets/MemberIcon.png";
 // import toerahLogo from "../assets/ToerahLogo.png";
 import toerahLogo from "../assets/ToerahLogoNoBG.png";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -14,13 +12,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-
-  const { logout } = useContext(AuthContext);
-
-  const handleLogout = () => {
-    logout();
-    onClose();
-  };
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
   return (
     <>
@@ -28,9 +21,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       <aside className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className="sidebar-header">
-          
           <img src={toerahLogo} alt="Toerah" className="sidebar-logo" />
-            <h2 className="sidebar-title">Toerah Inventory</h2>
+          <h2 className="sidebar-title">Toerah Inventory</h2>
 
           <nav className="sidebar-menu">
             <Link
@@ -55,22 +47,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <img src={inventoryicon} alt="Inventory" />
               <p>Inventory</p>
             </Link>
-            <Link
-              to="/member"
-              className={`menu-item ${
-                location.pathname === "/member" ? "active" : ""
-              }`}
-              onClick={onClose}
-            >
-              <span className="menu-highlight"></span>
-              <img src={memberIcon} alt="Member" />
-              <p>Member</p>
-            </Link>
+            {user?.role === "admin" && (
+              <Link
+                to="/member"
+                className={`menu-item ${
+                  location.pathname === "/member" ? "active" : ""
+                }`}
+                onClick={onClose}
+              >
+                <span className="menu-highlight"></span>
+                <img src={memberIcon} alt="Member" />
+                <p>Member</p>
+              </Link>
+            )}
           </nav>
         </div>
-        <button className="logout-btn" onClick={handleLogout}>
-          Log Out
-        </button>
       </aside>
     </>
   );

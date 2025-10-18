@@ -30,14 +30,6 @@ function App() {
     }
   };
 
-  const mockUser = {
-    username: "Google Person Account",
-    email: "googleaccount1@gmail.com",
-    password: "Admin1234",
-    telegramId: "1198009289990",
-    phone: "089211245598",
-  };
-
   const isLoginPage = location.pathname === "/login";
 
   return (
@@ -58,7 +50,6 @@ function App() {
             <Profile
               isOpen={profileOpen}
               onClose={() => setProfileOpen(false)}
-              user={mockUser}
             />
           </div>
           </>
