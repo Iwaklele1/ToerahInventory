@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/MemberPage.css";
-import { FaSearch } from "react-icons/fa";
+import iconsearch from "../assets/Iconsearch_memberpage.png";
+import warningSign from "../assets/WarningSign_memberpage.png";
 
 interface Member {
   username: string;
@@ -101,10 +102,10 @@ const MemberPage: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button className="search-icon">
-              <FaSearch />
-            </button>
+            <img src={iconsearch} alt="search" className="search-icon"
+            />
           </div>
+            <button className="add-member-btn">Add Member</button>
         </div>
 
         <div className="member-table">
@@ -142,7 +143,6 @@ const MemberPage: React.FC = () => {
                 style={{
                   textAlign: "center",
                   gridColumn: "1 / -1",
-                  color: "#555",
                 }}
               >
                 No members found
@@ -215,7 +215,7 @@ const MemberPage: React.FC = () => {
       {showConfirm && (
         <div className="confirm-overlay">
           <div className="confirm-modal">
-            <h4>⚠️ Are you sure to kick this member?</h4>
+            <h4><img src={warningSign} alt="warnsign" className="warning-icon"/> Are you sure to kick this member?</h4>
             <p>
               This action cannot be undone. This will permanently delete this
               member from the list.
