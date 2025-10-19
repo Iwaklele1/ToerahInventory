@@ -17,8 +17,10 @@
   --sidebar-background-color: #443627;
   --add-vendor-btn-color: #CC6E00;
   --login-btn-color: #6B4226;
+  --tabel-hover: #F3E2C5;
+  
 
-   /* Typography */
+  /* Typography */
   --font: 'Titillium Web', sans-serif;
 
 }
