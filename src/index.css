@@ -18,14 +18,9 @@
   --add-vendor-btn-color: #CC6E00;
   --login-btn-color: #6B4226;
   --tabel-hover: #F3E2C5;
-  --create-new-vendor: #FFF9F2;
-  --searchbar-input-holder: #FEF7EF;
-  --vendorlink: #2F2418;
-  --border-seacrhbar: #ccc
-
 
    /* Typography */
-  --font: 'Titillium Web', sans-serif;
+  --font-family: 'Titillium Web', sans-serif;
 
 }
 html, body, #root {
@@ -40,7 +35,7 @@ body {
 }
 
 .app {
-  padding: 50px 100px;
+  padding: 50px 100px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;

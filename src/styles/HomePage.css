@@ -1,21 +1,9 @@
+@import "../index.css";
+
 .home-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
-  min-height: 100vh;
-  padding: 0 100px; /* jarak dari tepi layar */
-  box-sizing: border-box;
-}
-
-.home-content {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: nowrap; /* biar tetap sejajar, gak pindah ke bawah */
-  justify-content: space-between;
-  max-width: 1800px; /* batas lebar total konten */
-  margin: 0 auto; /* center-kan */
-  width: 100%;
-  gap: 32px;
   box-sizing: border-box;
 }
 
@@ -26,10 +14,6 @@
   gap: 20px;
   width: 572px; /* biar sama dengan lebar chart & box besar */
 }
-html, body {
-  overflow: hidden; /* ✅ Hilangin scrollbar horizontal & vertical */
-}
-
 
 /* Pie Chart Card */
 .chart-card {

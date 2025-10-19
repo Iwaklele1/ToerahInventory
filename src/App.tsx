@@ -2,7 +2,6 @@ import "./App.css";
 import Header from "./components/Header";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-// import LoginPage from "./pages/LoginPage";
 import Sidebar from "./components/Sidebar";
 import { useState } from "react";
 import DetailInventoryPage from "./pages/DetailInventoryPage";
