@@ -93,6 +93,7 @@
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
   font-size: 18px;
+  margin: 4px;
 }
 
 .btn-new:hover,
