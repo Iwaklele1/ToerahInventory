@@ -134,7 +134,7 @@ const HomePage: React.FC = () => {
 
         {/* ===== RIGHT SECTION ===== */}
         <div className="right-section">
-          <div className="inventory-header">
+          <div className="home-header">
             <div className="search-container">
               <input
                 type="text"
@@ -228,7 +228,7 @@ const HomePage: React.FC = () => {
 
           {/* ===== TABLE SECTION ===== */}
           <div className="table-wrapper">
-            <table className="inventory-table">
+            <table className="home-table">
               <thead>
                 <tr>
                   <th></th>
