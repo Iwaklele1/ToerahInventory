@@ -112,7 +112,7 @@
 .filter-btn {
   border: none;
   padding: 8px 10px;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
 }
@@ -308,7 +308,7 @@
 
 /* ===== PRODUCT NAME ===== */
 .product-name {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--black);
   white-space: nowrap;
 }
