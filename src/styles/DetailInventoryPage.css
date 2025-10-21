@@ -1,0 +1,475 @@
+@import "../index.css";
+
+/* ===== LAYOUT ===== */
+
+.inventory-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 25px;
+}
+
+/* LEFT SIDE */
+.inventory-container {
+  flex: 3;
+  background-color: var(--white);
+  border-radius: 25px;
+  padding: 26px;
+  width: 1319px;
+  height: 860px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== TOP BAR ===== */
+.inventory-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Grup kiri (search & filter) */
+.search-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 5;
+}
+
+/* ===== SEARCH CONTAINER ===== */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-container input {
+  width: 300px;
+  padding: 10px 40px 10px 14px; /* kasih ruang kanan biar ga ketimpa icon */
+  border: 2px solid #ccc;
+  border-radius: 50px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-container input:focus {
+  border-color: var(--primary-orange-color);
+}
+
+/* ===== ICON SEARCH ===== */
+.search-icon {
+  position: absolute;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 2; /* pastikan di atas input */
+  transition: transform 0.2s ease;
+}
+
+.search-icon:hover {
+  transform: scale(1.1);
+}
+
+
+/* ===== ACTION BUTTONS (kanan) ===== */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-new,
+.btn-edit {
+  background-color: #f5e6d3;
+  color: var(--dark-brown);
+  border: none;
+  padding: 8px;
+  width: 175px;
+  height: 45px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  font-size: 18px;
+  margin: 4px;
+}
+
+.btn-new:hover,
+.btn-edit:hover {
+  background-color: var(--tabel-hover);
+  transform: scale(1.03);
+}
+
+.btn-new.active,
+.btn-edit.active {
+  background-color: var(--dark-brown);
+  color: #fff;
+}
+
+/* ===== FILTER DROPDOWN & button ===== */
+.filter-btn {
+  border: none;
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.filter-container {
+  position: relative;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeIn 0.25s ease forwards;
+}
+
+.filter-dropdown.right-side {
+  left: 110%;
+  top: 10%;
+}
+
+.filter-btn:hover {
+  transform: scale(1.1);
+}
+
+.filter-dropdown button {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  text-align: center;
+  width: 100%;
+  font-size: 18px;
+  cursor: pointer;
+  color: #000;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover hanya untuk tombol filter utama (This Month, Custom) */
+.filter-dropdown > button:hover {
+  background-color: var(--primary-orange-color);
+  color: var(--white);
+}
+
+/* === CUSTOM DATE FILTER === */
+.custom-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.custom-filter label {
+  font-size: 0.85rem;
+  color: var(--primary-orange-color);
+}
+
+.custom-filter input[type="date"] {
+  padding: 6px;
+  border: 1px solid var(--primary-orange-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.clear-btn,
+.apply-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s, transform 0.1s;
+  text-align: center;
+}
+
+
+.clear-btn:hover {
+  background-color: #3b2d1d;
+  color: var(--white);
+}
+
+.apply-btn:hover {
+  background-color: var(--apply-btn);
+  transform: scale(1.03);
+  color: var(--white);
+}
+
+/* ===== TABLE WRAPPER FIX ===== */
+.inventory-table {
+  width: 100%;
+  border-collapse: separate; /* ini penting! jangan pakai collapse */
+  border-spacing: 0;
+  font-size: 18px;
+}
+
+/* ===== HEADER ===== */
+.inventory-table thead tr {
+  background-color: var(--primary-orange-color); /* warna oranye */
+  color: var(--black);
+  border-radius: 30px; /* pill shape */
+  overflow: hidden;
+}
+
+.inventory-table th {
+  padding: 14px 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: none;
+}
+
+/* Biar pojok kiri dan kanan membulat */
+.inventory-table thead tr th:first-child {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.inventory-table thead tr th:last-child {
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+.inventory-table th {
+  padding: 14px 12px;
+  text-align: left;
+  font-weight: 600;
+  border: none;
+}
+
+/* ===== BODY ===== */
+.inventory-table tbody tr {
+  background-color: var(--white);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  border-bottom: 2px solid var(--black); /* garis hitam pemisah */
+}
+
+.inventory-table tbody tr:hover {
+  background-color: var(--tabel-hover);
+}
+
+/* Tambahan biar spacing antarbaris rapih */
+.inventory-table tbody tr:not(:last-child) td {
+  border-bottom: 2px solid var(--black); /* garis antarbaris */
+}
+
+/* ===== CELL STYLE ===== */
+.inventory-table td {
+  padding: 14px 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* ===== PRODUCT CELL (Gambar + Nama) ===== */
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 18px; /* jarak antara gambar dan nama */
+  padding-left: 12px; /* biar gak terlalu nempel kiri */
+}
+
+/* ===== PRODUCT IMAGE ===== */
+.product-thumb {
+  width: 55px;
+  height: 55px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+}
+
+.product-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== PRODUCT NAME ===== */
+.product-name {
+  font-weight: 600;
+  color: var(--black);
+  white-space: nowrap;
+}
+
+/* ===== STATUS BADGES ===== */
+.status {
+  padding: 4px 10px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 175px;
+  height: 44px;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.status.low-stock {
+  background-color: var(--primary-orange-color);
+  color: var(--white);
+}
+
+.status.out-of-stock {
+  background-color: var(--out-of-stock);
+  color: var(--white);
+}
+
+.status.in-stock {
+  background-color: var(--full-stock);
+  color: var(--white);
+}
+
+/* ===== RIGHT SIDE (Manage Inventory) ===== */
+.manage-inventory {
+  flex: 1.3;
+  background-color: var(--white);
+  padding: 25px;
+  width: 375px;
+  height: 650px;
+  border-radius: 25px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+}
+
+.manage-inventory h3 {
+  background-color: var(--primary-orange-color);
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.manage-inventory form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+  flex: 1;
+  font-size: 18px;
+}
+
+.manage-inventory label {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.manage-inventory select,
+.manage-inventory input {
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  font-size: 14px;
+}
+
+.manage-inventory select:focus,
+.manage-inventory input:focus {
+  border-color: var(--primary-orange-color);
+  box-shadow: 0 0 4px rgba(245, 166, 35, 0.3);
+}
+
+.manage-inventory button {
+  margin-top: 10px;
+  background-color: var(--dark-brown);
+  color: var(--white);
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.manage-inventory button:hover {
+  background-color: var(--dark-brown);
+  transform: scale(1.02);
+}
+
+/* ===== DELETE BUTTON ===== */
+.delete-btn {
+  width: 150px;
+  height: 44px;
+  background-color: var(--btn-color);
+  color: var(--white);
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background-color: var(--cancel-btn-color);
+  transform: scale(1.03);
+}
+
+
+/* ===== QUANTITY CONTROL ===== */
+.quantity-control {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 20px;
+  margin-top: 6px;
+}
+
+.quantity-control button {
+  background-color: #F5E6D3;
+  color: var(--black);
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  outline: none;
+}
+
+.quantity-control button:hover {
+  background-color: #f3d8b8;
+}
+
+.quantity-control button:active {
+  background-color: var(--dark-brown);
+  color: var(--white);
+  transform: scale(0.95);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
