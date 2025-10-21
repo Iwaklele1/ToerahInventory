@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../styles/DetailInventoryPage.css";
+import "../styles/InventoryPage.css";
 import { useNavigate } from "react-router-dom";
 import productImage from "../assets/productImage_inventorypage.png";
 import iconFilter from "../assets/IconFilter_inventorypage.png";

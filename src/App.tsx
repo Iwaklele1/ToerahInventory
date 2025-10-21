@@ -4,7 +4,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Sidebar from "./components/Sidebar";
 import { useState } from "react";
-import DetailInventoryPage from "./pages/DetailInventoryPage";
+import InventoryPage from "./pages/InventoryPage";
 import MemberPage from "./pages/MemberPage";
 import ProtectedRoute from "./route/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
@@ -70,7 +70,7 @@ function App() {
             path="/inventory"
             element={
               <ProtectedRoute>
-                <DetailInventoryPage />
+                <InventoryPage />
               </ProtectedRoute>
             }
           />
