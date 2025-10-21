@@ -1,59 +1,14 @@
 import React, { useState } from "react";
 import "../styles/HomePage.css";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  filterInventoryByDate,
+  getStockStatusSummary,
+} from "../utils/InventoryUtils";
 import { useNavigate } from "react-router-dom";
 import boxIcon from "../assets/BoxIcon.png";
-import productImage from "../assets/Rectangle 62.png";
 import searchIcon from "../assets/IconSearch_homepage.png";
-
-const pieData = [
-  { name: "Available", value: 60, color: "#4CAF50" },
-  { name: "Low", value: 20, color: "#F4B400" },
-  { name: "Out", value: 20, color: "#E74C3C" },
-];
-
-const productData = [
-  {
-    id: 1,
-    name: "Coffee Gayo",
-    productId: "100001",
-    category: "Stocked",
-    status: "Low Stock",
-    route: "/coffee-gayo",
-  },
-  {
-    id: 2,
-    name: "Grinder",
-    productId: "200001",
-    category: "Non-Stocked",
-    status: "Out Of Stock",
-    route: "/grinder",
-  },
-  {
-    id: 3,
-    name: "Diamond Milk",
-    productId: "100001",
-    category: "Stocked",
-    status: "In Stock",
-    route: "/diamond-milk",
-  },
-  {
-    id: 4,
-    name: "Coffee Gayo",
-    productId: "100001",
-    category: "Stocked",
-    status: "Low Stock",
-    route: "/coffee-gayo",
-  },
-  {
-    id: 5,
-    name: "Coffee Gayo",
-    productId: "100001",
-    category: "Stocked",
-    status: "Low Stock",
-    route: "/coffee-gayo",
-  },
-];
+import { inventoryData } from "../data/inventoryData";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -61,7 +16,7 @@ const getStatusColor = (status: string) => {
       return "#4CAF50";
     case "Low Stock":
       return "#F4B400";
-    case "Out Of Stock":
+    case "Out of Stock":
       return "#E74C3C";
     default:
       return "#999";
@@ -69,20 +24,33 @@ const getStatusColor = (status: string) => {
 };
 
 const HomePage: React.FC = () => {
+  const [filterType, setFilterType] = useState<"thisMonth" | "custom">(
+    "thisMonth"
+  );
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  const filteredData =
+    filterType === "custom"
+      ? filterInventoryByDate(inventoryData, fromDate, toDate)
+      : filterInventoryByDate(inventoryData);
+
+  const summary = getStockStatusSummary(filteredData);
+
+  const pieData = [
+    { name: "In Stock", value: summary.inStock, color: "#4CAF50" },
+    { name: "Low Stock", value: summary.lowStock, color: "#F4B400" },
+    { name: "Out of Stock", value: summary.outOfStock, color: "#E74C3C" },
+  ];
   const navigate = useNavigate();
 
   // 🔽 State untuk dropdown filter
   const [showFilter, setShowFilter] = useState(false);
-  const [filterType, setFilterType] = useState<"thisMonth" | "custom">(
-    "thisMonth"
-  );
   const [showCustom, setShowCustom] = useState(false);
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
 
   return (
     <>
-      <div className="app home-wrapper">
+      <div className="home-wrapper">
         {/* ===== LEFT SECTION ===== */}
         <div className="left-section">
           {/* Pie Chart */}
@@ -259,51 +227,73 @@ const HomePage: React.FC = () => {
           </div>
 
           {/* ===== TABLE SECTION ===== */}
-          <table className="inventory-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Product Name</th>
-                <th>Product ID</th>
-                <th>Category</th>
-                <th>Status</th>
-                <th>Supplier</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productData.map((item) => (
-                <tr
-                  key={item.id}
-                  className="hoverable"
-                  onClick={() => navigate(item.route)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {/* Kolom gambar */}
-                  <td className="image-cell">
-                    <div className="product-thumb">
-                      <img src={productImage} alt={item.name} />
-                    </div>
-                  </td>
-
-                  {/* Kolom nama produk */}
-                  <td className="product-name">{item.name}</td>
-
-                  {/* Kolom lainnya */}
-                  <td>{item.productId}</td>
-                  <td>{item.category}</td>
-                  <td>
-                    <span
-                      className="status-badge"
-                      style={{ backgroundColor: getStatusColor(item.status) }}
-                    >
-                      {item.status}
-                    </span>
-                  </td>
-                  <td>—</td>
+          <div className="table-wrapper">
+            <table className="inventory-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Product Name</th>
+                  <th>Product ID</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Supplier</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {filteredData.length > 0 ? (
+                  filteredData.map((item) => (
+                    <tr
+                      key={item.id}
+                      className="hoverable"
+                      onClick={() => navigate(`/inventory/${item.id}`)} // contoh routing ke detail item
+                      style={{ cursor: "pointer" }}
+                    >
+                      {/* Gambar Produk */}
+                      <td className="image-cell">
+                        <div className="product-thumb">
+                          <img src={item.image} alt={item.productName} />
+                        </div>
+                      </td>
+
+                      {/* Nama Produk */}
+                      <td className="product-name">{item.productName}</td>
+
+                      {/* ID Produk */}
+                      <td>{item.id}</td>
+
+                      {/* Kategori */}
+                      <td>{item.category}</td>
+
+                      {/* Status dengan warna */}
+                      <td>
+                        <span
+                          className="status-badge"
+                          style={{
+                            backgroundColor: getStatusColor(item.status),
+                          }}
+                        >
+                          {item.status}
+                        </span>
+                      </td>
+
+                      {/* Supplier */}
+                      <td>{item.supplier}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      style={{ textAlign: "center", padding: "1rem" }}
+                    >
+                      No data found for this period.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </>

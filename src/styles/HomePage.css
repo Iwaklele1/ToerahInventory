@@ -5,7 +5,8 @@
   flex-direction: row;
   justify-content: center;
   box-sizing: border-box;
-  font-family: var(--font);
+  padding-top: 50px;
+  gap: 25px;
 }
 
 /* ===== Left Section ===== */
@@ -140,26 +141,44 @@
 }
 
 /* ===== TABLE WRAPPER FIX ===== */
+.table-wrapper {
+  width: 100%;
+  max-height: 700px; /* area scroll */
+  overflow-y: auto;
+  border-radius: 20px;
+}
+
 .inventory-table {
   width: 100%;
-  border-collapse: separate; /* ini penting! jangan pakai collapse */
+  border-collapse: separate;
   border-spacing: 0;
   font-size: 18px;
+  table-layout: fixed; /* penting biar kolom konsisten */
 }
 
 /* ===== HEADER ===== */
-.inventory-table thead tr {
-  background-color: var(--primary-orange-color); /* warna oranye */
+.inventory-table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  background-color: var(--primary-orange-color);
   color: var(--black);
+  border-radius: 30px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.inventory-table thead tr {
   border-radius: 30px; /* pill shape */
   overflow: hidden;
 }
 
 .inventory-table th {
-  padding: 14px 12px;
+  padding: 14px 10px;
   text-align: left;
   font-weight: 600;
-  border-bottom: none;
+  border: none;
 }
 
 /* Biar pojok kiri dan kanan membulat */
@@ -172,18 +191,34 @@
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
 }
-.inventory-table th {
-  padding: 14px 12px;
-  text-align: left;
-  font-weight: 600;
-  border: none;
-}
 
 /* ===== BODY ===== */
+.inventory-table tbody {
+  display: block;
+  width: 100%;
+  max-height: 640px; /* area scroll */
+  overflow-y: auto;
+}
+
+.inventory-table tbody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.inventory-table tbody::-webkit-scrollbar-thumb {
+  background: var(--primary-orange-color);
+  border-radius: 10px;
+}
+
+.inventory-table tbody::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.inventory-table thead,
 .inventory-table tbody tr {
-  background-color: var(--white);
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  border-bottom: 2px solid var(--black); /* garis hitam pemisah */
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
 .inventory-table tbody tr:hover {
@@ -245,6 +280,7 @@
   border-radius: 25px;
   display: inline-block;
   text-align: center;
+  width: 100px;
 }
 
 /* Status colors */
@@ -258,9 +294,31 @@
   background-color: var(--out-of-stock);
 }
 
-/* ===== ALIGN FIRST COLUMN (checkbox + img) ===== */
-.inventory-table td:first-child {
-  width: 60px;
+
+/* ===== SCROLL ALIGN FIX ===== */
+.inventory-table td:first-child,
+.inventory-table th:first-child {
+  width: 80px;
+}
+.inventory-table th:nth-child(2),
+.inventory-table td:nth-child(2) {
+  width: 180px;
+}
+.inventory-table th:nth-child(3),
+.inventory-table td:nth-child(3) {
+  width: 120px;
+}
+.inventory-table th:nth-child(4),
+.inventory-table td:nth-child(4) {
+  width: 160px;
+}
+.inventory-table th:nth-child(5),
+.inventory-table td:nth-child(5) {
+  width: 140px;
+}
+.inventory-table th:nth-child(6),
+.inventory-table td:nth-child(6) {
+  width: 200px;
 }
 
 .search-container {
@@ -273,7 +331,7 @@
   width: 319px;
   height: 30px;
   padding: 8px 35px 8px 12px; /* Tambah ruang di kanan buat ikon */
-  border: 1px solid var(--border-searchbar);
+  border: 2px solid var(--search-border-color);
   border-radius: 25px;
   font-size: 18px;
   outline: none;
@@ -285,7 +343,6 @@
   width: 22px;
   height: 22px;
   cursor: pointer;
-  opacity: 0.8;
   transition: opacity 0.2s ease;
 }
 
