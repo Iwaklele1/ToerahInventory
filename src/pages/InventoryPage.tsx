@@ -36,13 +36,13 @@ const InventoryPage = () => {
     setIsEditMode,
   } = InventoryCUD(inventoryList, setInventoryList);
 
-  // 🔹 Pastikan filter ambil dari state, bukan dari data statis
+  //  Pastikan filter ambil dari state, bukan dari data statis
   const filteredData =
     filterType === "custom"
       ? filterInventoryByDate(inventoryList, fromDate, toDate)
       : filterInventoryByDate(inventoryList);
 
-  // 🔹 Terapkan pencarian
+  // Terapkan pencarian
   const displayedData = filteredData.filter((item) =>
     item.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -65,7 +65,7 @@ const InventoryPage = () => {
               <img src={iconSearch} alt="search" className="search-icon" />
             </div>
 
-            {/* 🔽 Filter Dropdown */}
+            {/* Filter Dropdown */}
             <div className="inventory-filter-wrapper" ref={filterRef}>
               <img
                 src={iconFilter}

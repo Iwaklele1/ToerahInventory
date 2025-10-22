@@ -1,54 +1,50 @@
 import React, { useState } from "react";
 import "../styles/MemberPage.css";
-import iconsearch from "../assets/Iconsearch_memberpage.png";
+import searchIcon from "../assets/Iconsearch_memberpage.png";
 import warningSign from "../assets/WarningSign_memberpage.png";
+import { memberData } from "../data/memberData";
 
 interface Member {
+  id: number;
   username: string;
   telegramId: string;
   email: string;
   password: string;
   phone: string;
+  role: string;
 }
 
 const MemberPage: React.FC = () => {
-  const [members, setMembers] = useState<Member[]>([
-    {
-      username: "Gabriel Deni",
-      telegramId: "100001",
-      email: "gabrieldeni@gmail.com",
-      password: "member001",
-      phone: "081234567890",
-    },
-    {
-      username: "Ibnu Dzaki",
-      telegramId: "200001",
-      email: "ibnudzaki@gmail.com",
-      password: "member002",
-      phone: "080987654321",
-    },
-    {
-      username: "Nabil Junior",
-      telegramId: "300001",
-      email: "nabiljunior@gmail.com",
-      password: "member003",
-      phone: "082134567890",
-    },
-  ]);
+  // ✅ Data awal dari memberData
+  const [members, setMembers] = useState<Member[]>(memberData);
 
+  // ✅ State untuk tambah member baru
   const [newMember, setNewMember] = useState<Member>({
+    id: members.length + 1,
     username: "",
     telegramId: "",
     email: "",
     password: "",
     phone: "",
+    role: "member",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState<number | null>(null);
 
-  const handleAddMember = () => {
+  // ✅ Handle perubahan input form
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewMember((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // ✅ Tambah member baru
+  const handleAddMember = (e: React.FormEvent) => {
+    e.preventDefault();
     if (
       newMember.username &&
       newMember.telegramId &&
@@ -56,34 +52,39 @@ const MemberPage: React.FC = () => {
       newMember.password &&
       newMember.phone
     ) {
-      setMembers([...members, newMember]);
+      const newId = members.length > 0 ? members[members.length - 1].id + 1 : 1;
+      const newEntry = { ...newMember, id: newId };
+      setMembers([...members, newEntry]);
       setNewMember({
+        id: newId + 1,
         username: "",
         telegramId: "",
         email: "",
         password: "",
         phone: "",
+        role: "member",
       });
     } else {
       alert("Please fill all fields!");
     }
   };
 
-  const confirmDelete = (index: number) => {
-    setMemberToDelete(index);
+  // ✅ Konfirmasi delete member
+  const confirmDelete = (id: number) => {
+    setMemberToDelete(id);
     setShowConfirm(true);
   };
 
   const handleDeleteMember = () => {
     if (memberToDelete !== null) {
-      const updated = [...members];
-      updated.splice(memberToDelete, 1);
+      const updated = members.filter((m) => m.id !== memberToDelete);
       setMembers(updated);
     }
     setShowConfirm(false);
     setMemberToDelete(null);
   };
 
+  // ✅ Filter pencarian
   const filteredMembers = members.filter(
     (m) =>
       m.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,45 +93,53 @@ const MemberPage: React.FC = () => {
 
   return (
     <div className="member-page">
-      {/* ============ BAGIAN TABEL MEMBER ============ */}
+      {/* ==================== TABLE SECTION ==================== */}
       <div className="table-section">
+        {/* ===== SEARCH BAR + BUTTON ===== */}
         <div className="search-filter-group">
           <div className="search-container">
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search member..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <img src={iconsearch} alt="search" className="search-icon"
-            />
+            <img src={searchIcon} alt="search" className="search-icon" />
           </div>
-            <button className="add-member-btn">Add Member</button>
+
+          <button
+            className="add-member-btn"
+            onClick={() => alert("Form di sebelah kanan ➜")}
+          >
+            + Add Member
+          </button>
         </div>
 
-        <div className="member-table">
-          <div className="table-header">
-            <div>Username</div>
-            <div>ID Telegram</div>
-            <div>Email</div>
-            <div>Password</div>
-            <div>Phone</div>
-            <div>Action</div>
-          </div>
+        {/* ===== HEADER TABEL ===== */}
+        <div className="table-header">
+          <div>Username</div>
+          <div>Telegram ID</div>
+          <div>Email</div>
+          <div>Role</div>
+          <div>Phone</div>
+          <div>Action</div>
+        </div>
 
-          <div className="table-body">
+        {/* ===== SCROLLABLE BODY ===== */}
+        <div className="member-table-wrapper">
+          <div className="member-table-body">
             {filteredMembers.length > 0 ? (
-              filteredMembers.map((member, index) => (
-                <div className="table-row" key={index}>
+              filteredMembers.map((member) => (
+                <div className="table-row" key={member.id}>
                   <div>{member.username}</div>
                   <div>{member.telegramId}</div>
                   <div>{member.email}</div>
-                  <div>{member.password}</div>
+                  <div>{member.role}</div>
                   <div>{member.phone}</div>
                   <div>
                     <button
                       className="kick-btn"
-                      onClick={() => confirmDelete(index)}
+                      onClick={() => confirmDelete(member.id)}
                     >
                       Kick
                     </button>
@@ -142,6 +151,7 @@ const MemberPage: React.FC = () => {
                 className="table-row"
                 style={{
                   textAlign: "center",
+                  justifyContent: "center",
                   gridColumn: "1 / -1",
                 }}
               >
@@ -152,73 +162,75 @@ const MemberPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ============ BAGIAN FORM TAMBAH MEMBER ============ */}
+      {/* ==================== FORM SECTION ==================== */}
       <div className="form-section">
-        <h3>Add New Member</h3>
+        <h3>Add Member Form</h3>
+        <form onSubmit={handleAddMember}>
+          <label>Username</label>
+          <input
+            type="text"
+            name="username"
+            value={newMember.username}
+            onChange={handleChange}
+          />
 
-        <label>Username</label>
-        <input
-          type="text"
-          placeholder="Enter username"
-          value={newMember.username}
-          onChange={(e) =>
-            setNewMember({ ...newMember, username: e.target.value })
-          }
-        />
+          <label>Telegram ID</label>
+          <input
+            type="text"
+            name="telegramId"
+            value={newMember.telegramId}
+            onChange={handleChange}
+          />
 
-        <label>ID Telegram</label>
-        <input
-          type="text"
-          placeholder="Enter Telegram ID"
-          value={newMember.telegramId}
-          onChange={(e) =>
-            setNewMember({ ...newMember, telegramId: e.target.value })
-          }
-        />
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={newMember.email}
+            onChange={handleChange}
+          />
 
-        <label>Email</label>
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={newMember.email}
-          onChange={(e) =>
-            setNewMember({ ...newMember, email: e.target.value })
-          }
-        />
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={newMember.password}
+            onChange={handleChange}
+          />
 
-        <label>Password</label>
-        <input
-          type="password"
-          placeholder="Enter password"
-          value={newMember.password}
-          onChange={(e) =>
-            setNewMember({ ...newMember, password: e.target.value })
-          }
-        />
+          <label>Phone</label>
+          <input
+            type="text"
+            name="phone"
+            value={newMember.phone}
+            onChange={handleChange}
+          />
 
-        <label>Phone Number</label>
-        <input
-          type="text"
-          placeholder="Enter phone number"
-          value={newMember.phone}
-          onChange={(e) =>
-            setNewMember({ ...newMember, phone: e.target.value })
-          }
-        />
-
-        <button className="submit-btn" onClick={handleAddMember}>
-          Submit
-        </button>
+          <button type="submit" className="submit-btn">
+            Add Member
+          </button>
+        </form>
       </div>
 
-      {/* ============ POPUP KONFIRMASI DELETE ============ */}
+      {/* ==================== POPUP KONFIRMASI ==================== */}
       {showConfirm && (
         <div className="confirm-overlay">
           <div className="confirm-modal">
-            <h4><img src={warningSign} alt="warnsign" className="warning-icon"/> Are you sure to kick this member?</h4>
+            <h4>
+              <img
+                src={warningSign}
+                alt="warning"
+                style={{
+                  width: "28px",
+                  verticalAlign: "middle",
+                  marginRight: "8px",
+                }}
+              />
+              Are you sure to kick this member?
+            </h4>
             <p>
-              This action cannot be undone. This will permanently delete this
-              member from the list.
+              This action cannot be undone. The member will be permanently
+              removed from the list.
             </p>
             <div className="confirm-buttons">
               <button
