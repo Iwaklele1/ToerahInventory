@@ -1,22 +1,22 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 @import "../index.css";
 
 .member-page {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 25px;
-  font-family: "Poppins", sans-serif;
+  gap: 50px;
   font-size: 18px;
+  padding: 50px 90px;
 }
 
 /* ===================== */
 /* ===== TABEL ===== */
 /* ===================== */
 .table-section {
+  flex: 5;
 background-color: var(--white);
   width: 1319px;
-  height: 860px;
+  height: 750px;
   padding: 30px;
   border-radius: 25px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
@@ -24,6 +24,7 @@ background-color: var(--white);
   flex-direction: column;
   gap: 12px;
   font-size: 18px;
+  margin: 0;
 }
 
 /* Search bar */
