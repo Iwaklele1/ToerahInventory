@@ -232,7 +232,7 @@
   color: var(--black);
 }
 
-/* ========== MAIN CONTENT ========== */
+/* ========== DETAIL PAGE CONTENT ========== */
 .detail-content {
   flex: 1;
   margin: 20px;
@@ -244,19 +244,33 @@
   flex-direction: column;
   width: 1247px;
   height: 810px;
-  overflow-y: auto;
+  overflow-y: auto; /* aktifkan scroll di area ini */
 }
 
+/* ====== CUSTOM SCROLLBAR ====== */
+.detail-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.detail-content::-webkit-scrollbar-thumb {
+  background: var(--primary-orange-color);
+  border-radius: 10px;
+}
+
+.detail-content::-webkit-scrollbar-thumb:hover {
+  background: #e69500;
+}
+
+/* ====== TABLE CONTAINER (biasa, tanpa scroll) ====== */
 .table-container {
   background-color: var(--white);
-  border-radius: 12px;
   border-radius: 12px;
   margin: 20px;
   padding: 20px 28px;
   display: flex;
   flex-direction: column;
-  
 }
+
 
 .add-vendor-btn {
   margin-top: 16px;
