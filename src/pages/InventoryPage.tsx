@@ -1,174 +1,51 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import "../styles/InventoryPage.css";
 import { useNavigate } from "react-router-dom";
-import productImage from "../assets/productImage_inventorypage.png";
 import iconFilter from "../assets/IconFilter_inventorypage.png";
 import iconSearch from "../assets/IconSearch_inventorypage.png";
+import { filterInventoryByDate } from "../utils/InventoryUtils";
+import { inventoryData } from "../data/inventoryData";
+import { InventoryCUD } from "../utils/InventoryCUD";
 
-const DetailInventoryPage = () => {
-  const userRole = "admin"; // ubah ke "staff" untuk mengetes peran staff
-
-  const [showFilter, setShowFilter] = useState(false);
+const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("thisMonth");
+  const filterRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
+  const [showFilter, setShowFilter] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [isEditMode, setIsEditMode] = useState(false);
 
-  const filterRef = useRef<HTMLDivElement>(null);
+  // 🔹 Gunakan state yang bisa berubah (bukan data statis)
+  const [inventoryList, setInventoryList] = useState(inventoryData);
 
-  const [inventoryData, setInventoryData] = useState([
-    {
-      id: "100001",
-      name: "Coffee Gayo",
-      category: "Stocked",
-      status: "Low Stock",
-      stock: 100,
-      type: "Kg",
-      supplier: "Vendor A",
-    },
-    {
-      id: "200001",
-      name: "Grinder",
-      category: "Non-Stocked",
-      status: "Out Of Stock",
-      stock: 2,
-      type: "Pcs",
-      supplier: "Vendor B",
-    },
-    {
-      id: "300001",
-      name: "Diamond Milk",
-      category: "Stocked",
-      status: "In Stock",
-      stock: 100,
-      type: "L",
-      supplier: "Vendor C",
-    },
-    {
-      id: "100001",
-      name: "Coffee Gayo",
-      category: "Stocked",
-      status: "Low Stock",
-      stock: 100,
-      type: "Kg",
-      supplier: "Vendor A",
-    },
-    {
-      id: "200001",
-      name: "Grinder",
-      category: "Non-Stocked",
-      status: "Out Of Stock",
-      stock: 2,
-      type: "Pcs",
-      supplier: "Vendor B",
-    },
-    {
-      id: "300001",
-      name: "Diamond Milk",
-      category: "Stocked",
-      status: "In Stock",
-      stock: 100,
-      type: "L",
-      supplier: "Vendor C",
-    },
-    {
-      id: "100001",
-      name: "Coffee Gayo",
-      category: "Stocked",
-      status: "Low Stock",
-      stock: 100,
-      type: "Kg",
-      supplier: "Vendor A",
-    },
-    {
-      id: "200001",
-      name: "Grinder",
-      category: "Non-Stocked",
-      status: "Out Of Stock",
-      stock: 2,
-      type: "Pcs",
-      supplier: "Vendor B",
-    },
-    {
-      id: "300001",
-      name: "Diamond Milk",
-      category: "Stocked",
-      status: "In Stock",
-      stock: 100,
-      type: "L",
-      supplier: "Vendor C",
-    },
-  ]);
+  // 🔹 Panggil hook InventoryCUD
+  const {
+    newProduct,
+    isEditMode,
+    handleAddProduct,
+    handleUpdateProduct,
+    handleDelete,
+    handleEdit,
+    setNewProduct,
+    setIsEditMode,
+  } = InventoryCUD(inventoryList, setInventoryList);
 
-  const navigate = useNavigate();
+  // 🔹 Pastikan filter ambil dari state, bukan dari data statis
+  const filteredData =
+    filterType === "custom"
+      ? filterInventoryByDate(inventoryList, fromDate, toDate)
+      : filterInventoryByDate(inventoryList);
 
-  const handleAddNew = () => setIsEditMode(false);
-  const handleEdit = () => setIsEditMode(true);
-
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    quantity: 0,
-    category: "Stocked",
-    type: "Kg",
-    vendor: "",
-  });
-
-  const handleAddProduct = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newItem = {
-      id: Math.floor(Math.random() * 900000 + 100000).toString(),
-      name: newProduct.name || "Unnamed Product",
-      category: newProduct.category,
-      status:
-        newProduct.quantity <= 0
-          ? "Out Of Stock"
-          : newProduct.quantity < 10
-          ? "Low Stock"
-          : "In Stock",
-      stock: newProduct.quantity,
-      type: newProduct.type,
-      supplier: newProduct.vendor || "-",
-    };
-    setInventoryData([...inventoryData, newItem]);
-    setNewProduct({
-      name: "",
-      quantity: 0,
-      category: "Stocked",
-      type: "Kg",
-      vendor: "",
-    });
-  };
-
-  const handleDelete = (id: string) => {
-    if (userRole !== "admin") {
-      alert("Only admin can delete data!");
-      return;
-    }
-    setInventoryData(inventoryData.filter((item) => item.id !== id));
-  };
-
-  const filteredData = inventoryData.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // 🔹 Terapkan pencarian
+  const displayedData = filteredData.filter((item) =>
+    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Tutup dropdown jika klik di luar
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        filterRef.current &&
-        !filterRef.current.contains(event.target as Node)
-      ) {
-        setShowFilter(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <div className="inventory-main">
@@ -176,8 +53,9 @@ const DetailInventoryPage = () => {
       <div className="inventory-container">
         {/* ===== TOP BAR ===== */}
         <div className="inventory-top">
-          <div className="search-filter-group">
-            <div className="search-container">
+          <div className="inventory-search-filter-group">
+            {/* 🔍 Search Bar */}
+            <div className="inventory-search-container">
               <input
                 type="text"
                 placeholder="Search..."
@@ -187,16 +65,17 @@ const DetailInventoryPage = () => {
               <img src={iconSearch} alt="search" className="search-icon" />
             </div>
 
-            <div className="filter-wrapper" ref={filterRef}>
+            {/* 🔽 Filter Dropdown */}
+            <div className="inventory-filter-wrapper" ref={filterRef}>
               <img
                 src={iconFilter}
                 alt="filter"
-                className={`filter-btn ${showFilter ? "active" : ""}`}
+                className={`inventory-filter-btn ${showFilter ? "active" : ""}`}
                 onClick={() => setShowFilter(!showFilter)}
               />
 
               {showFilter && (
-                <div className="filter-dropdown">
+                <div className="filter-dropdown right-side">
                   <button
                     className={filterType === "thisMonth" ? "active" : ""}
                     onClick={() => {
@@ -204,7 +83,7 @@ const DetailInventoryPage = () => {
                       setShowCustom(false);
                     }}
                   >
-                    This Month
+                    Last 30 days
                   </button>
 
                   <button
@@ -268,17 +147,17 @@ const DetailInventoryPage = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="action-buttons">
+          {/* 🔹 Action Buttons */}
+          <div className="inventory-action-buttons">
             <button
               className={`btn-new ${!isEditMode ? "active" : ""}`}
-              onClick={handleAddNew}
+              onClick={() => setIsEditMode(false)}
             >
               New Product
             </button>
             <button
               className={`btn-edit ${isEditMode ? "active" : ""}`}
-              onClick={handleEdit}
+              onClick={() => setIsEditMode(true)}
             >
               Edit Product
             </button>
@@ -297,59 +176,57 @@ const DetailInventoryPage = () => {
                 <th>Status</th>
                 <th>Stock</th>
                 <th>Type</th>
-                {userRole === "member" && <th>Supplier</th>}
-                {userRole === "admin" && <th>Action</th>}
+                {user?.role === "member" && <th>Supplier</th>}
+                {user?.role === "admin" && <th>Action</th>}
               </tr>
             </thead>
 
             <tbody>
-              {filteredData.map((item, index) => (
-                <tr key={index}>
-                  {/* IMAGE */}
-                  <td>
-                    <div className="product-thumb">
-                      <img src={productImage} alt={item.name} />
-                    </div>
-                  </td>
-
-                  {/* PRODUCT NAME */}
-                  <td>
-                    <div className="product-cell">
-                      <span className="product-name">{item.name}</span>
-                    </div>
-                  </td>
-
-                  {/* OTHER DATA */}
-                  <td>{item.id}</td>
-                  <td>{item.category}</td>
-                  <td>
-                    <span
-                      className={`status-badge ${item.status
-                        .replace(/\s+/g, "-")
-                        .toLowerCase()}`}
-                    >
-                      {item.status}
-                    </span>
-                  </td>
-                  <td>{item.stock}</td>
-                  <td>{item.type}</td>
-
-                  {/* SUPPLIER TEXT (STAFF ONLY) */}
-                  {userRole === "staff" && <td>{item.supplier}</td>}
-
-                  {/* DELETE BUTTON (ADMIN ONLY) */}
-                  {userRole === "admin" && (
+              {displayedData.length > 0 ? (
+                displayedData.map((item) => (
+                  <tr key={item.id} className="hoverable">
                     <td>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        Delete
-                      </button>
+                      <div className="product-thumb">
+                        <img src={item.image} alt={item.productName} />
+                      </div>
                     </td>
-                  )}
+                    <td>{item.productName}</td>
+                    <td>{item.id}</td>
+                    <td>{item.category}</td>
+                    <td>
+                      <span
+                        className={`status-badge ${item.status
+                          .replace(/\s+/g, "-")
+                          .toLowerCase()}`}
+                      >
+                        {item.status}
+                      </span>
+                    </td>
+                    <td>{item.stock}</td>
+                    <td>{item.type}</td>
+                    {user?.role === "member" && <td>{item.supplier}</td>}
+                    {user?.role === "admin" && (
+                      <td>
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={8}
+                    style={{ textAlign: "center", padding: "1rem" }}
+                  >
+                    No data found.
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -357,74 +234,64 @@ const DetailInventoryPage = () => {
 
       {/* ===== RIGHT SIDE ===== */}
       <div className="manage-inventory">
-        <h3>{isEditMode ? "Manage Inventory" : "Add Item"}</h3>
+        <h3>{isEditMode ? "Edit Product" : "Add New Product"}</h3>
 
-        <form onSubmit={handleAddProduct}>
-          {/* === CONDITIONAL FIELD: PRODUCT ID OR NAME === */}
+        <form onSubmit={isEditMode ? handleUpdateProduct : handleAddProduct}>
           {isEditMode ? (
             <>
-              <label>Select Product ID</label>
+              <label>Select Product</label>
               <select
                 value={newProduct.id || ""}
                 onChange={(e) => {
-                  const selected = inventoryData.find(
-                    (item) => item.id === e.target.value
+                  const selected = inventoryList.find(
+                    (item) => item.id === Number(e.target.value)
                   );
-                  if (selected) {
-                    setNewProduct({
-                      id: selected.id,
-                      name: selected.name,
-                      quantity: selected.stock,
-                      category: selected.category,
-                      type: selected.type,
-                      vendor: selected.supplier,
-                    });
-                  }
+                  if (selected) setNewProduct({ ...selected });
                 }}
               >
                 <option value="">Select Product ID</option>
-                {inventoryData.map((item) => (
+                {inventoryList.map((item) => (
                   <option key={item.id} value={item.id}>
-                    {item.id}
+                    {item.id} — {item.productName}
                   </option>
                 ))}
               </select>
             </>
           ) : (
             <>
-              <label>Enter Name</label>
+              <label>Product Name</label>
               <input
                 type="text"
                 placeholder="Enter product name"
-                value={newProduct.name}
+                value={newProduct.productName}
                 onChange={(e) =>
-                  setNewProduct({ ...newProduct, name: e.target.value })
+                  setNewProduct({ ...newProduct, productName: e.target.value })
                 }
               />
             </>
           )}
 
-          {/* === QUANTITY === */}
-          <label>Enter Quantity To Add</label>
+          {/* STOCK */}
+          <label>Stock Quantity</label>
           <div className="quantity-control">
             <button
               type="button"
               onClick={() =>
                 setNewProduct({
                   ...newProduct,
-                  quantity: Math.max(0, newProduct.quantity - 1),
+                  stock: Math.max(0, newProduct.stock - 1),
                 })
               }
             >
               -
             </button>
-            <span>{newProduct.quantity}</span>
+            <span>{newProduct.stock}</span>
             <button
               type="button"
               onClick={() =>
                 setNewProduct({
                   ...newProduct,
-                  quantity: newProduct.quantity + 1,
+                  stock: newProduct.stock + 1,
                 })
               }
             >
@@ -432,45 +299,76 @@ const DetailInventoryPage = () => {
             </button>
           </div>
 
-          {/* === OTHER FIELDS === */}
-          <label>Select Product Category</label>
-          <select
-            value={newProduct.category}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, category: e.target.value })
-            }
-          >
-            <option>Stocked</option>
-            <option>Non-Stocked</option>
-          </select>
-
-          <label>Select Product Type</label>
+          {/* TYPE */}
+          <label>Unit Type</label>
           <select
             value={newProduct.type}
             onChange={(e) =>
               setNewProduct({ ...newProduct, type: e.target.value })
             }
           >
-            <option>Kg</option>
-            <option>Pcs</option>
-            <option>L</option>
+            <option value="Pcs">Pcs</option>
+            <option value="Kg">Kg</option>
+            <option value="Gram">Gram</option>
+            <option value="L">L</option>
+            <option value="mL">mL</option>
+            <option value="Box">Box</option>
           </select>
 
-          <label>Enter Vendor Name</label>
+          {/* CATEGORY */}
+          <label>Category</label>
+          <select
+            value={newProduct.category}
+            onChange={(e) =>
+              setNewProduct({
+                ...newProduct,
+                category: e.target.value as "Stocked" | "Non-Stocked",
+              })
+            }
+          >
+            <option value="Stocked">Stocked</option>
+            <option value="Non-Stocked">Non-Stocked</option>
+          </select>
+
+          {/* SUPPLIER */}
+          <label>Supplier</label>
           <input
             type="text"
-            placeholder="Enter vendor name"
-            value={newProduct.vendor}
+            placeholder="Enter supplier name"
+            value={newProduct.supplier}
             onChange={(e) =>
-              setNewProduct({ ...newProduct, vendor: e.target.value })
+              setNewProduct({ ...newProduct, supplier: e.target.value })
             }
           />
 
-          <button type="submit">{isEditMode ? "Submit" : "Add Product"}</button>
+          {/* DESCRIPTION */}
+          <label>Description</label>
+          <textarea
+            placeholder="Enter product description"
+            value={newProduct.description}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, description: e.target.value })
+            }
+          />
+
+          {/* IMAGE */}
+          <label>Image URL</label>
+          <input
+            type="text"
+            placeholder="Enter image URL or leave default"
+            value={newProduct.image}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, image: e.target.value })
+            }
+          />
+
+          <button type="submit">
+            {isEditMode ? "Update Product" : "Add Product"}
+          </button>
         </form>
       </div>
     </div>
   );
 };
 
-export default DetailInventoryPage;
+export default InventoryPage;

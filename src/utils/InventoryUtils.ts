@@ -59,3 +59,4 @@ export const getStockStatusSummary = (data: InventoryItem[]) => {
 
   return summary;
 };
+

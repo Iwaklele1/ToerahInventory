@@ -2,7 +2,6 @@ import "../styles/Sidebar.css";
 import dashboardIcon from "../assets/DashboardIcon.png";
 import inventoryicon from "../assets/InventoryIcon.png";
 import memberIcon from "../assets/MemberIcon.png";
-// import toerahLogo from "../assets/ToerahLogo.png";
 import toerahLogo from "../assets/ToerahLogoNoBG.png";
 import { Link } from "react-router-dom";
 

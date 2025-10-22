@@ -31,7 +31,7 @@
 }
 
 /* Grup kiri (search & filter) */
-.search-filter-group {
+.inventory-search-filter-group {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -40,13 +40,13 @@
 }
 
 /* ===== SEARCH CONTAINER ===== */
-.search-container {
+.inventory-search-container {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.search-container input {
+.inventory-search-container input {
   width: 300px;
   padding: 10px 40px 10px 14px; /* kasih ruang kanan biar ga ketimpa icon */
   border: 2px solid #ccc;
@@ -55,7 +55,7 @@
   outline: none;
 }
 
-.search-container input:focus {
+.inventory-search-container input:focus {
   border-color: var(--primary-orange-color);
 }
 
@@ -76,7 +76,7 @@
 
 
 /* ===== ACTION BUTTONS (kanan) ===== */
-.action-buttons {
+.inventory-inventory-action-buttons {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -111,7 +111,7 @@
 }
 
 /* ===== FILTER DROPDOWN & button ===== */
-.filter-btn {
+.inventory-filter-btn {
   border: none;
   padding: 8px 10px;
   border-radius: 12px;
@@ -119,11 +119,11 @@
   transition: background-color 0.2s, transform 0.1s;
 }
 
-.filter-container {
+.inventory-filter-container {
   position: relative;
 }
 
-.filter-dropdown {
+.inventory-filter-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
@@ -141,16 +141,16 @@
   animation: fadeIn 0.25s ease forwards;
 }
 
-.filter-dropdown.right-side {
+.inventory-filter-dropdown.right-side {
   left: 110%;
   top: 10%;
 }
 
-.filter-btn:hover {
+.inventory-filter-btn:hover {
   transform: scale(1.1);
 }
 
-.filter-dropdown button {
+.inventory-filter-dropdown button {
   background: none;
   border: none;
   padding: 8px 12px;
@@ -164,39 +164,39 @@
 }
 
 /* Hover hanya untuk tombol filter utama (This Month, Custom) */
-.filter-dropdown > button:hover {
+.inventory-filter-dropdown > button:hover {
   background-color: var(--primary-orange-color);
   color: var(--white);
 }
 
 /* === CUSTOM DATE FILTER === */
-.custom-filter {
+.inventory-custom-filter {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 6px;
 }
 
-.custom-filter label {
+.inventory-custom-filter label {
   font-size: 0.85rem;
   color: var(--primary-orange-color);
 }
 
-.custom-filter input[type="date"] {
+.inventory-custom-filter input[type="date"] {
   padding: 6px;
   border: 1px solid var(--primary-orange-color);
   border-radius: 6px;
   font-size: 0.9rem;
 }
 
-.filter-actions {
+.inventory-filter-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
 }
 
-.clear-btn,
-.apply-btn {
+.inventory-clear-btn,
+.inventory-apply-btn {
   padding: 6px 14px;
   border: none;
   border-radius: 6px;
@@ -207,12 +207,12 @@
 }
 
 
-.clear-btn:hover {
+.inventory-clear-btn:hover {
   background-color: #3b2d1d;
   color: var(--white);
 }
 
-.apply-btn:hover {
+.inventory-apply-btn:hover {
   background-color: var(--apply-btn);
   transform: scale(1.03);
   color: var(--white);
@@ -316,7 +316,7 @@
 }
 .inventory-table th:nth-child(2),
 .inventory-table td:nth-child(2) {
-  width: 160px;
+  width: 200px;
   padding: 0;
 }
 .inventory-table th:nth-child(3),
@@ -419,7 +419,7 @@
   background-color: var(--white);
   padding: 25px;
   width: 375px;
-  height: 650px;
+  height: 770px;
   border-radius: 25px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   display: flex;
