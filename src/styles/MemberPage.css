@@ -1,0 +1,363 @@
+@import "../index.css";
+
+.member-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  font-size: 18px;
+  padding: 50px 80px;
+  font-family: var(--font);
+}
+
+/* ===================== */
+/* ===== TABEL ===== */
+/* ===================== */
+.table-section {
+  flex: 5;
+  background-color: var(--white);
+  width: 1319px;
+  height: 750px;
+  padding: 35px 40px;
+  border-radius: 25px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: var(--font);
+}
+
+/* ====== SEARCH + BUTTON BAR ====== */
+.search-filter-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font);
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-family: var(--font);
+}
+
+.search-container input {
+  width: 320px;
+  padding: 10px 45px 10px 16px;
+  border: 2px solid #ccc;
+  border-radius: 50px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-container input:focus {
+  border-color: var(--primary-orange-color);
+}
+
+.search-icon {
+  position: absolute;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.search-icon:hover {
+  transform: scale(1.1);
+}
+
+.add-member-btn {
+  background-color: var(--dark-brown);
+  color: var(--white);
+  border: none;
+  width: 175px;
+  height: 45px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  font-family: var(--font);
+}
+
+.add-member-btn:hover {
+  background-color: #4a3421;
+  transform: scale(1.03);
+}
+
+/* ====== TABLE BODY ====== */
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 2fr 1fr 1.3fr 0.8fr;
+  align-items: center;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-family: var(--font);
+}
+
+.table-header {
+  background-color: var(--primary-orange-color);
+  border-radius: 50px;
+  font-weight: 600;
+  color: var(--black);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.table-row {
+  border-bottom: 1px solid #ccc;
+  transition: background-color 0.15s ease;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-row:hover {
+  background-color: var(--tabel-hover);
+}
+
+/* ====== SCROLL TABLE WRAPPER ====== */
+.member-table-wrapper {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 580px; /* tinggi area scroll */
+  overflow-y: auto;
+}
+
+/* ===== BODY (SCROLLABLE AREA) ===== */
+.member-table-body {
+  display: block;
+  table-layout: fixed;
+  width: 100%;
+  background-color: var(--white);
+}
+
+/* ===== BARIS TABEL ===== */
+.member-table-body .table-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 2fr 1fr 1.3fr 0.8fr;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 2px solid var(--black);
+  background-color: var(--white);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.member-table-body .table-row:hover {
+  background-color: var(--tabel-hover);
+}
+
+/* ===== SCROLLBAR CUSTOM ===== */
+.member-table-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.member-table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--primary-orange-color);
+  border-radius: 10px;
+}
+
+.member-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #e69500;
+}
+
+/* ====== BUTTON KICK ====== */
+.kick-btn {
+  width: 150px;
+  height: 44px;
+  background-color: var(--btn-color);
+  color: var(--white);
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+}
+
+.kick-btn:hover {
+  background-color: var(--cancel-btn-color);
+  transform: scale(1.05);
+}
+
+/* ===================== */
+/* ===== FORM ===== */
+/* ===================== */
+.form-section {
+  flex: 1.3;
+  background-color: var(--white);
+  padding: 25px;
+  width: 375px;
+  height: 770px;
+  border-radius: 25px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  font-family: var(--font);
+}
+
+.form-section h3 {
+  background-color: var(--primary-orange-color);
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 18px;
+  font-family: var(--font);
+}
+
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+  flex: 1;
+  font-size: 18px;
+  font-family: var(--font);
+}
+
+.form-section label {
+  font-weight: 600;
+  font-size: 18px;
+  font-family: var(--font);
+}
+
+.form-section select,
+.form-section input {
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  font-size: 14px;
+  font-family: var(--font);
+}
+
+.form-section select:focus,
+.form-section input:focus {
+  border-color: var(--primary-orange-color);
+  box-shadow: 0 0 4px rgba(245, 166, 35, 0.3);
+}
+
+.form-section button {
+  margin-top: 10px;
+  background-color: var(--dark-brown);
+  color: var(--white);
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  font-family: var(--font);
+  font-size: 18px;
+}
+
+.form-section button:hover {
+  background-color: var(--dark-brown);
+  transform: scale(1.02);
+}
+
+/* ===================== */
+/* ===== POPUP ===== */
+/* ===================== */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.confirm-modal {
+  background-color: #fff1e0;
+  width: 480px;
+  padding: 30px 35px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.25s ease-in-out;
+  font-family: var(--font);
+}
+
+.confirm-modal h4 {
+  color: var(--cancel-btn-color);
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font);
+}
+
+.confirm-modal p {
+  font-size: 18px;
+  color: var(--black);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  font-family: var(--font);
+}
+
+.confirm-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 15px;
+}
+
+.cancel-btn,
+.confirm-btn {
+  flex: 1;
+  border: none;
+  height: 50px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  font-family: var(--font);
+}
+
+.cancel-btn {
+  background-color: var(--white);
+  border: 2px solid var(--cancel-btn-color);
+  color: var(--cancel-btn-color);
+}
+
+.cancel-btn:hover {
+  background-color: #ffeaea;
+  transform: scale(1.03);
+}
+
+.confirm-btn {
+  background-color: var(--cancel-btn-color);
+  color: var(--white);
+}
+
+.confirm-btn:hover {
+  background-color: #8b2222;
+  transform: scale(1.03);
+}
+
+/* Animasi popup */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

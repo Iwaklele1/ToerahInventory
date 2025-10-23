@@ -1,62 +1,78 @@
-// src/utils/inventoryUtils.ts
-// src/utils/inventoryUtils.ts
-import type { InventoryItem } from "../data/inventoryData";
+// src/utils/InventoryUtils.ts
+import type { InventoryItem, StockStatus } from "../data/inventoryData";
 
-// 🔹 Filter data berdasarkan tanggal (range atau default this month)
+/* ============================================================
+   🔹 Hitung status stok otomatis berdasarkan kapasitas
+   ============================================================ */
+export const getStockStatus = (stock: number, capacity: number): StockStatus => {
+  if (capacity <= 0) return "Out of Stock";
+  const percent = (stock / capacity) * 100;
+  if (percent <= 10) return "Out of Stock";
+  if (percent < 30) return "Low Stock";
+  return "In Stock";
+};
+
+/* ============================================================
+   🔹 Filter data inventory berdasarkan tanggal
+   ============================================================ */
 export const filterInventoryByDate = (
   data: InventoryItem[],
   fromDate?: string,
   toDate?: string
 ): InventoryItem[] => {
-  // ✅ Default: filter bulan ini
-  if (!fromDate && !toDate) {
-    const now = new Date();
-    const thisMonth = now.getMonth();
-    const thisYear = now.getFullYear();
-
-    return data.filter((item) => {
-      if (!item.lastUpdated) return false; // jaga-jaga kalau field kosong
-      const itemDate = new Date(item.lastUpdated);
-      return (
-        itemDate.getMonth() === thisMonth && itemDate.getFullYear() === thisYear
-      );
-    });
-  }
-
-  // ✅ Jika ada range tanggal (custom)
-  const from = fromDate ? new Date(fromDate) : new Date("1970-01-01");
+  const from = fromDate ? new Date(fromDate) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const to = toDate ? new Date(toDate) : new Date();
 
   return data.filter((item) => {
-    if (!item.lastUpdated) return false;
-    const itemDate = new Date(item.lastUpdated);
-    return itemDate >= from && itemDate <= to;
+    const updated = new Date(item.lastUpdated);
+    return updated >= from && updated <= to;
   });
 };
 
-
-// 🔹 Hitung total per status untuk chart
+/* ============================================================
+   🔹 Hitung ringkasan status stok (buat chart / dashboard)
+   ============================================================ */
 export const getStockStatusSummary = (data: InventoryItem[]) => {
-  const summary = {
-    inStock: 0,
-    lowStock: 0,
-    outOfStock: 0,
-  };
-
+  const summary = { inStock: 0, lowStock: 0, outOfStock: 0 };
   data.forEach((item) => {
     switch (item.status) {
       case "In Stock":
-        summary.inStock += 1;
+        summary.inStock++;
         break;
       case "Low Stock":
-        summary.lowStock += 1;
+        summary.lowStock++;
         break;
       case "Out of Stock":
-        summary.outOfStock += 1;
+        summary.outOfStock++;
         break;
     }
   });
-
   return summary;
 };
 
+/* ============================================================
+   🔹 Ambil data dari Local Storage
+   ============================================================ */
+const STORAGE_KEY = "inventoryData";
+
+export const getInventoryFromStorage = (): InventoryItem[] => {
+  try {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (!storedData) return [];
+    return JSON.parse(storedData);
+  } catch (error) {
+    console.error("Error loading inventory data:", error);
+    return [];
+  }
+};
+
+/* ============================================================
+   🔹 Simpan data ke Local Storage
+   ============================================================ */
+export const saveInventoryToStorage = (data: InventoryItem[]) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving inventory data:", error);
+  }
+};

@@ -1,60 +1,59 @@
+// src/pages/InventoryPage.tsx
 import React, { useState, useRef } from "react";
 import "../styles/InventoryPage.css";
 import { useNavigate } from "react-router-dom";
 import iconFilter from "../assets/IconFilter_inventorypage.png";
 import iconSearch from "../assets/IconSearch_inventorypage.png";
 import { filterInventoryByDate } from "../utils/InventoryUtils";
-import { inventoryData } from "../data/inventoryData";
-import { InventoryCUD } from "../utils/InventoryCUD";
+import { InventoryHook } from "../utils/InventoryHook";
 
 const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("thisMonth");
+  const [filterType, setFilterType] = useState<"thisMonth" | "custom">(
+    "thisMonth"
+  );
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
+  const [showCustom, setShowCustom] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
 
-  const [showFilter, setShowFilter] = useState(false);
-  const [showCustom, setShowCustom] = useState(false);
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-
-  // 🔹 Gunakan state yang bisa berubah (bukan data statis)
-  const [inventoryList, setInventoryList] = useState(inventoryData);
-
-  // 🔹 Panggil hook InventoryCUD
+  // ambil semua logic dari hook
   const {
+    inventoryList,
     newProduct,
     isEditMode,
     handleAddProduct,
     handleUpdateProduct,
     handleDelete,
-    handleEdit,
     setNewProduct,
-    setIsEditMode,
-  } = InventoryCUD(inventoryList, setInventoryList);
+    handleAddNew,
+    handleEditMode,
+    setEditingId,
+    handleEdit,
+  } = InventoryHook();
 
-  // 🔹 Pastikan filter ambil dari state, bukan dari data statis
+  // filter + search
   const filteredData =
     filterType === "custom"
       ? filterInventoryByDate(inventoryList, fromDate, toDate)
       : filterInventoryByDate(inventoryList);
 
-  // 🔹 Terapkan pencarian
   const displayedData = filteredData.filter((item) =>
     item.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="inventory-main">
-      {/* ===== LEFT SIDE ===== */}
+      {/* Left Side */}
       <div className="inventory-container">
-        {/* ===== TOP BAR ===== */}
         <div className="inventory-top">
           <div className="inventory-search-filter-group">
-            {/* 🔍 Search Bar */}
+            {/* Search */}
             <div className="inventory-search-container">
               <input
                 type="text"
@@ -65,7 +64,7 @@ const InventoryPage = () => {
               <img src={iconSearch} alt="search" className="search-icon" />
             </div>
 
-            {/* 🔽 Filter Dropdown */}
+            {/* Filter */}
             <div className="inventory-filter-wrapper" ref={filterRef}>
               <img
                 src={iconFilter}
@@ -73,7 +72,6 @@ const InventoryPage = () => {
                 className={`inventory-filter-btn ${showFilter ? "active" : ""}`}
                 onClick={() => setShowFilter(!showFilter)}
               />
-
               {showFilter && (
                 <div className="filter-dropdown right-side">
                   <button
@@ -128,14 +126,7 @@ const InventoryPage = () => {
                         <button
                           type="button"
                           className="apply-btn"
-                          onClick={() => {
-                            alert(
-                              `Tanggal diterapkan:\nDari: ${
-                                fromDate || "-"
-                              }\nSampai: ${toDate || "-"}`
-                            );
-                            setShowFilter(false);
-                          }}
+                          onClick={() => setShowFilter(false)}
                         >
                           Apply
                         </button>
@@ -147,31 +138,31 @@ const InventoryPage = () => {
             </div>
           </div>
 
-          {/* 🔹 Action Buttons */}
+          {/* Buttons */}
           <div className="inventory-action-buttons">
             <button
               className={`btn-new ${!isEditMode ? "active" : ""}`}
-              onClick={() => setIsEditMode(false)}
+              onClick={handleAddNew}
             >
               New Product
             </button>
             <button
               className={`btn-edit ${isEditMode ? "active" : ""}`}
-              onClick={() => setIsEditMode(true)}
+              onClick={handleEditMode}
             >
               Edit Product
             </button>
           </div>
         </div>
 
-        {/* ===== TABLE ===== */}
+        {/* Table */}
         <div className="inventory-table-wrapper">
           <table className="inventory-table">
             <thead>
               <tr>
                 <th></th>
                 <th>Product Name</th>
-                <th>Product ID</th>
+                <th>ID</th>
                 <th>Category</th>
                 <th>Status</th>
                 <th>Stock</th>
@@ -180,17 +171,25 @@ const InventoryPage = () => {
                 {user?.role === "admin" && <th>Action</th>}
               </tr>
             </thead>
-
             <tbody>
               {displayedData.length > 0 ? (
                 displayedData.map((item) => (
-                  <tr key={item.id} className="hoverable">
+                  <tr
+                    key={item.id}
+                    className="hoverable"
+                    onClick={() => navigate(`/detailitem/${item.id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <td>
-                      <div className="product-thumb">
-                        <img src={item.image} alt={item.productName} />
-                      </div>
+                      <img
+                        src={item.image}
+                        alt={item.productName}
+                        className="inventory-thumb"
+                      />
                     </td>
-                    <td>{item.productName}</td>
+                    <td className="inventory-product-name">
+                      {item.productName}
+                    </td>
                     <td>{item.id}</td>
                     <td>{item.category}</td>
                     <td>
@@ -208,7 +207,7 @@ const InventoryPage = () => {
                     {user?.role === "admin" && (
                       <td>
                         <button
-                          className="delete-btn"
+                          className="inventory-delete-btn"
                           onClick={() => handleDelete(item.id)}
                         >
                           Delete
@@ -232,10 +231,9 @@ const InventoryPage = () => {
         </div>
       </div>
 
-      {/* ===== RIGHT SIDE ===== */}
+      {/* Right Side */}
       <div className="manage-inventory">
         <h3>{isEditMode ? "Edit Product" : "Add New Product"}</h3>
-
         <form onSubmit={isEditMode ? handleUpdateProduct : handleAddProduct}>
           {isEditMode ? (
             <>
@@ -243,13 +241,17 @@ const InventoryPage = () => {
               <select
                 value={newProduct.id || ""}
                 onChange={(e) => {
+                  const selectedId = Number(e.target.value);
                   const selected = inventoryList.find(
-                    (item) => item.id === Number(e.target.value)
+                    (item) => item.id === selectedId
                   );
-                  if (selected) setNewProduct({ ...selected });
+                  if (selected) {
+                    setNewProduct({ ...selected });
+                    setEditingId(selectedId); // ✅ penting! tambahkan ini
+                  }
                 }}
               >
-                <option value="">Select Product ID</option>
+                <option value="">Select Product</option>
                 {inventoryList.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.id} — {item.productName}
@@ -271,8 +273,7 @@ const InventoryPage = () => {
             </>
           )}
 
-          {/* STOCK */}
-          <label>Stock Quantity</label>
+          <label>Stock</label>
           <div className="quantity-control">
             <button
               type="button"
@@ -289,17 +290,13 @@ const InventoryPage = () => {
             <button
               type="button"
               onClick={() =>
-                setNewProduct({
-                  ...newProduct,
-                  stock: newProduct.stock + 1,
-                })
+                setNewProduct({ ...newProduct, stock: newProduct.stock + 1 })
               }
             >
               +
             </button>
           </div>
 
-          {/* TYPE */}
           <label>Unit Type</label>
           <select
             value={newProduct.type}
@@ -315,7 +312,6 @@ const InventoryPage = () => {
             <option value="Box">Box</option>
           </select>
 
-          {/* CATEGORY */}
           <label>Category</label>
           <select
             value={newProduct.category}
@@ -330,7 +326,6 @@ const InventoryPage = () => {
             <option value="Non-Stocked">Non-Stocked</option>
           </select>
 
-          {/* SUPPLIER */}
           <label>Supplier</label>
           <input
             type="text"
@@ -341,21 +336,19 @@ const InventoryPage = () => {
             }
           />
 
-          {/* DESCRIPTION */}
           <label>Description</label>
           <textarea
-            placeholder="Enter product description"
+            placeholder="Enter description"
             value={newProduct.description}
             onChange={(e) =>
               setNewProduct({ ...newProduct, description: e.target.value })
             }
           />
 
-          {/* IMAGE */}
           <label>Image URL</label>
           <input
             type="text"
-            placeholder="Enter image URL or leave default"
+            placeholder="Enter image URL"
             value={newProduct.image}
             onChange={(e) =>
               setNewProduct({ ...newProduct, image: e.target.value })
