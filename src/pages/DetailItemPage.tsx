@@ -36,7 +36,7 @@ const DetailItemPage: React.FC = () => {
 
   return (
     <div className="detail-page-container">
-      {/*SIDEBAR*/}
+      {/* SIDEBAR */}
       <div className="sidebar">
         <div className="sidebar-header">
           {!showSearch ? (
@@ -69,7 +69,9 @@ const DetailItemPage: React.FC = () => {
 
         {/* Daftar Produk di Sidebar */}
         <div className="product-list">
-          <h4><b>Product List</b></h4>
+          <h4>
+            <b>Product List</b>
+          </h4>
           {[1, 2, 3, 4, 5].map((item) => (
             <div className="product-item" key={item}>
               <div className="product-thumb">
@@ -109,7 +111,7 @@ const DetailItemPage: React.FC = () => {
                 <span className="value">100001</span>
               </div>
 
-                <div className="detail-item">
+              <div className="detail-item">
                 <img src={iconCeklis} alt="Checklist Icon" className="icon-checklist" />
                 <span className="value">
                   <span className="detail-item status low">Low Stock</span>
@@ -124,36 +126,35 @@ const DetailItemPage: React.FC = () => {
               <div className="detail-item">
                 <img src={iconProduct} alt="Product Icon" className="icon-product" />
                 <span className="label">100 Kg</span>
-                <span className="value"></span>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Tabs Section */}
+        <div className="tabs-container">
+          <div className="tabs">
+            <button
+              className={`tab-button ${activeTab === "vendors" ? "active" : ""}`}
+              onClick={() => setActiveTab("vendors")}
+            >
+              <img src={userIcon} alt="vendors" className="icon-tab" />
+              Product Vendors
+            </button>
+
+            <button
+              className={`tab-button ${activeTab === "history" ? "active" : ""}`}
+              onClick={() => setActiveTab("history")}
+            >
+              <img src={timeIcon} alt="history" className="icon-tab" />
+              Order History
+            </button>
           </div>
-
-
-      <div className="tabs-container">
-  <div className="tabs">
-    <button
-      className={`tab-button ${activeTab === "vendors" ? "active" : ""}`}
-      onClick={() => setActiveTab("vendors")}
-    >
-      <img src={userIcon} alt="vendors" className="icon-tab" />
-      Product Vendors
-    </button>
-
-    <button
-      className={`tab-button ${activeTab === "history" ? "active" : ""}`}
-      onClick={() => setActiveTab("history")}
-    >
-      <img src={timeIcon} alt="history" className="icon-tab" />
-      Order History
-    </button>
-  </div>
-</div>
+        </div>
 
         {/* Table Section */}
         {activeTab === "vendors" ? (
-          <div className="table-container fade-in">
+          <div className="detail-item-table-container">
             <table>
               <thead>
                 <tr>
@@ -186,7 +187,7 @@ const DetailItemPage: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="table-container fade-in">
+          <div className="detail-item-table-container">
             <table>
               <thead>
                 <tr>
@@ -213,98 +214,80 @@ const DetailItemPage: React.FC = () => {
             </table>
           </div>
         )}
-      </div>
 
-{showAddVendorModal && (
-  <div className="modal-overlay">
-    <div className="modal add-vendor-modal">
-      <h3>Add vendor to product</h3>
+        {/* ================= MODAL ADD VENDOR ================= */}
+        {showAddVendorModal && (
+          <div className="modal-overlay">
+            <div className="modal add-vendor-modal">
+              <h3>Add vendor to product</h3>
 
-      {/* Search bar */}
-      <div className="search-bar">
-        <input type="text" placeholder="Search" />
-        <img src={searchIcon} alt="search" className="icon-search-modal" />
-      </div>
+              {/* Search bar */}
+              <div className="search-bar">
+                <input type="text" placeholder="Search" />
+                <img src={searchIcon} alt="search" className="icon-search-modal" />
+              </div>
 
-      {/* Vendor list */}
-      <div className="vendor-list">
-        {[1, 2, 3].map((item) => (
-          <div className="vendor-item" key={item}>
-            <div className="vendor-info">
-              <img src={userIcon} alt="vendor" className="icon-user-modal" />
-              <div className="vendor-text">
-                <span className="vendor-name">Product Vendor</span>
-                <span className="vendor-link">(Vendor Link Optional)</span>
+              {/* Vendor list */}
+              <div className="vendor-list">
+                {[1, 2, 3].map((item) => (
+                  <div className="vendor-item" key={item}>
+                    <div className="vendor-info">
+                      <img src={userIcon} alt="vendor" className="icon-user-modal" />
+                      <div className="vendor-text">
+                        <span className="vendor-name">Product Vendor</span>
+                        <span className="vendor-link">(Vendor Link Optional)</span>
+                      </div>
+                    </div>
+                    <hr />
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer buttons */}
+              <div className="modal-footer">
+                <button className="create-new-btn" onClick={handleCreateVendor}>
+                  ＋ Create new vendor
+                </button>
+                <button className="cancel-btn" onClick={() => setShowAddVendorModal(false)}>
+                  Cancel
+                </button>
               </div>
             </div>
-            <hr />
           </div>
-        ))}
-      </div>
+        )}
 
-      {/* Footer buttons */}
-      <div className="modal-footer">
-        <button
-          className="create-new-btn"
-          onClick={() => {
-            setShowAddVendorModal(false);
-            setShowCreateVendorModal(true);
-          }}
-        >
-          ＋ Create new vendor
-        </button>
-        <button
-          className="cancel-btn"
-          onClick={() => setShowAddVendorModal(false)}
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+        {/* ================= MODAL CREATE VENDOR ================= */}
+        {showCreateVendorModal && (
+          <div className="modal-overlay">
+            <div className="modal create-vendor-modal">
+              <h3>Create a new vendor</h3>
 
-{/* ================= MODAL CREATE VENDOR ================= */}
-{showCreateVendorModal && (
-  <div className="modal-overlay">
-    <div className="modal create-vendor-modal">
-      <h3>Create a new vendor</h3>
+              <div className="form-group">
+                <label htmlFor="vendorName">Vendor name</label>
+                <input id="vendorName" type="text" placeholder="Enter vendor name" className="input-field" />
+              </div>
 
-      <div className="form-group">
-        <label htmlFor="vendorName">Vendor name</label>
-        <input
-          id="vendorName"
-          type="text"
-          placeholder="Enter vendor name"
-          className="input-field"
-        />
-      </div>
+              <div className="form-group">
+                <label htmlFor="vendorLink">Vendor link (optional)</label>
+                <input id="vendorLink" type="text" placeholder="Enter vendor link" className="input-field" />
+              </div>
 
-      <div className="form-group">
-        <label htmlFor="vendorLink">Vendor link (optional)</label>
-        <input
-          id="vendorLink"
-          type="text"
-          placeholder="Enter vendor link"
-          className="input-field"
-        />
+              <div className="modal-actions">
+                <button
+                  className="cancel-btn"
+                  onClick={() => {
+                    setShowCreateVendorModal(false);
+                    setShowAddVendorModal(true);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button className="create-btn">Create</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      <div className="modal-actions">
-        <button
-          className="cancel-btn"
-          onClick={() => {
-            setShowCreateVendorModal(false);
-            setShowAddVendorModal(true);
-          }}
-        >
-          Cancel
-        </button>
-        <button className="create-btn">Create</button>
-      </div>
-    </div>
-  </div>
-)}
     </div>
   );
 };

@@ -410,26 +410,34 @@
   flex-shrink: 0; /* biar ukuran ikon gak berubah */
 }
 
-/* Styling untuk header tabel (th) */
-/* ===== TABEL HEADER NYATU ===== */
-.table-container table {
+/* ===== TABEL DETAIL ITEM ===== */
+.detail-item-table-container {
+  background-color: var(--white);
+  border-radius: 12px;
+  margin: 20px;
+  padding: 20px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-item-table-container table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0; /* biar gak ada jarak antar kolom */
   border: none;
 }
 
-thead {
+.detail-item-table-container thead {
   background-color: var(--primary-orange-color); /* warna header (oranye kek di gambar) */
   color: var(--black);
 }
 
-thead tr {
+.detail-item-table-container thead tr {
   border-radius: 50px;
   overflow: hidden;
 }
 
-th {
+.detail-item-table-container th {
   font-weight: 600;
   text-align: left;
   padding: 14px 20px;
@@ -439,23 +447,34 @@ th {
 }
 
 /* Radius pojok kiri & kanan biar bentuknya rounded kayak di gambar */
-thead tr:first-child th:first-child {
+.detail-item-table-container thead tr:first-child th:first-child {
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
 }
 
-thead tr:first-child th:last-child {
+.detail-item-table-container thead tr:first-child th:last-child {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
 }
 
-
 /* Styling untuk isi tabel (td) */
-td {
+.detail-item-table-container td {
   padding: 10px 16px;
   border-bottom: 2px solid var(--black); /* garis pemisah antar baris */
   font-size: 18px;
   background-color: var(--white); /* biar tetap putih */
+}
+
+/* Tombol add vendor di bawah tabel */
+.detail-item-table-container .add-vendor-btn {
+  margin-top: 16px;
+  background-color: var(--add-vendor-btn-color);
+  color: var(--white);
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 18px;
 }
 
 
