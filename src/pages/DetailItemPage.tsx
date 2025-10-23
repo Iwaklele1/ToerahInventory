@@ -89,10 +89,10 @@ const DetailItemPage: React.FC = () => {
                 <img src={searchIcon} alt="search" />
               </button>
               <div className="item-right-icons">
-                <button className="item-icon-btn">
+                <button className="item-icon-btn" onClick={() => navigate("/inventory")}>
                   <img src={plusIcon} alt="add" />
                 </button>
-                <button className="item-icon-btn">
+                <button className="item-icon-btn" onClick={() => navigate("/inventory")}>
                   <img src={editIcon} alt="edit" />
                 </button>
               </div>
