@@ -4,18 +4,22 @@ import "../styles/InventoryPage.css";
 import { useNavigate } from "react-router-dom";
 import iconFilter from "../assets/IconFilter_inventorypage.png";
 import iconSearch from "../assets/IconSearch_inventorypage.png";
+import warningSign from "../assets/WarningSign_memberpage.png"; // ✅ perbaikan import gambar
 import { filterInventoryByDate } from "../utils/InventoryUtils";
 import { InventoryHook } from "../utils/InventoryHook";
 
 const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"thisMonth" | "custom">(
-    "thisMonth"
-  );
+  const [filterType, setFilterType] = useState<"thisMonth" | "custom">("thisMonth");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
+
+  // ✅ untuk modal konfirmasi delete
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+
   const filterRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -33,9 +37,16 @@ const InventoryPage = () => {
     setNewProduct,
     handleAddNew,
     handleEditMode,
-    setEditingId,
-    handleEdit,
   } = InventoryHook();
+
+  // ✅ fungsi konfirmasi delete
+  const handleConfirmDelete = () => {
+    if (selectedItemId !== null) {
+      handleDelete(selectedItemId);
+      setSelectedItemId(null);
+      setShowConfirm(false);
+    }
+  };
 
   // filter + search
   const filteredData =
@@ -206,22 +217,25 @@ const InventoryPage = () => {
                     {user?.role === "member" && <td>{item.supplier}</td>}
                     {user?.role === "admin" && (
                       <td>
-                        <button
-                          className="inventory-delete-btn"
-                          onClick={() => handleDelete(item.id)}
-                        >
-                          Delete
-                        </button>
+                        <div className="delete-wrapper">
+                          <button
+                            className="inventory-delete-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedItemId(item.id);
+                              setShowConfirm(true);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     )}
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan={8}
-                    style={{ textAlign: "center", padding: "1rem" }}
-                  >
+                  <td colSpan={8} style={{ textAlign: "center", padding: "1rem" }}>
                     No data found.
                   </td>
                 </tr>
@@ -230,6 +244,30 @@ const InventoryPage = () => {
           </table>
         </div>
       </div>
+
+      {/* ✅ Modal konfirmasi delete */}
+      {showConfirm && (
+        <div className="confirm-overlay">
+          <div className="confirm-modal">
+            <h4>
+              <img src={warningSign} alt="warnsign" className="warning-icon" />{" "}
+              Are you sure to delete this item?
+            </h4>
+            <p>
+              This action cannot be undone. This will permanently delete this
+              item and remove our data.
+            </p>
+            <div className="confirm-buttons">
+              <button className="cancel-btn" onClick={() => setShowConfirm(false)}>
+                No, cancel
+              </button>
+              <button className="confirm-btn" onClick={handleConfirmDelete}>
+                Yes, I’m sure
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Right Side */}
       <div className="manage-inventory">
@@ -241,14 +279,10 @@ const InventoryPage = () => {
               <select
                 value={newProduct.id || ""}
                 onChange={(e) => {
-                  const selectedId = Number(e.target.value);
                   const selected = inventoryList.find(
-                    (item) => item.id === selectedId
+                    (item) => item.id === Number(e.target.value)
                   );
-                  if (selected) {
-                    setNewProduct({ ...selected });
-                    setEditingId(selectedId); // ✅ penting! tambahkan ini
-                  }
+                  if (selected) setNewProduct({ ...selected });
                 }}
               >
                 <option value="">Select Product</option>
