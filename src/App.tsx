@@ -9,6 +9,7 @@ import MemberPage from "./pages/MemberPage";
 import ProtectedRoute from "./route/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import Profile from "./components/Profile";
+import DetailItemPage from "./pages/DetailItemPage";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -24,6 +25,8 @@ function App() {
         return "Inventory";
       case "/member":
         return "Member";
+      case "/detailitem":
+        return "Detail Item";
       default:
         return "";
     }
@@ -33,10 +36,9 @@ function App() {
 
   return (
     <>
-        {!isLoginPage && (
-          <>
+      {!isLoginPage && (
+        <>
           <div className="app">
-
             <Header
               title={getTitle()}
               onMenuClick={() => setSidebarOpen(true)}
@@ -51,42 +53,50 @@ function App() {
               onClose={() => setProfileOpen(false)}
             />
           </div>
-          </>
-        )}
+        </>
+      )}
 
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
 
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/inventory"
-            element={
-              <ProtectedRoute>
-                <InventoryPage />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/inventory"
+          element={
+            <ProtectedRoute>
+              <InventoryPage />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/member"
-            element={
-              <ProtectedRoute>
-                <MemberPage />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/member"
+          element={
+            <ProtectedRoute>
+              <MemberPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/detailitem"
+          element={
+            <ProtectedRoute>
+              <DetailItemPage />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* redirect tidak dikenal */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        {/* redirect tidak dikenal */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </>
   );
 }

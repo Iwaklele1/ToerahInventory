@@ -1,32 +1,39 @@
-// src/data/inventoryData.ts
+// src/data/InventoryData.ts
 import productImage from "../assets/Rectangle 62.png";
 
+/* ============================================================
+   🔹 Type Definitions
+   ============================================================ */
 
-export type StockStatus = "In Stock" | "Low Stock" | "Out of Stock";
 export type Category = "Stocked" | "Non-Stocked";
+export type StockStatus = "In Stock" | "Low Stock" | "Out of Stock";
 
 export interface InventoryItem {
-  id: number; // 4-digit ID
+  id: number;
   productName: string;
   category: Category;
   stock: number;
+  capacity: number;
   type: string;
-  status: StockStatus;
   supplier: string;
   image: string;
   description: string;
-  lastUpdated: string; // ISO date string (ex: "2025-03-10")
+  lastUpdated: string;
+  status: "In Stock" | "Low Stock" | "Out of Stock"; // wajib ada
 }
 
-// ✅ Dummy data sementara
-export const inventoryData: InventoryItem[] = [
+/* ============================================================
+   🔹 Initial Dummy Data
+   ============================================================ */
+
+export const inventoryData: Omit<InventoryItem, "status">[] = [
   {
     id: 1001,
     productName: "Coffee Gayo",
     category: "Stocked",
-    stock: 2860,
+    stock: 260,
+    capacity: 5000,
     type: "pcs",
-    status: "Low Stock",
     supplier: "Gayo Beans Supplier",
     image: productImage,
     description:
@@ -37,9 +44,9 @@ export const inventoryData: InventoryItem[] = [
     id: 2001,
     productName: "Grinder",
     category: "Non-Stocked",
-    stock: 0,
+    stock: 1,
+    capacity: 2,
     type: "pcs",
-    status: "Out of Stock",
     supplier: "GrindMaster Co.",
     image: productImage,
     description:
@@ -51,8 +58,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Diamond Milk",
     category: "Stocked",
     stock: 500,
+    capacity: 1000,
     type: "pcs",
-    status: "In Stock",
     supplier: "Fresh Dairy Indonesia",
     image: productImage,
     description: "High quality milk for premium coffee blends.",
@@ -63,8 +70,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Coffee Toraja",
     category: "Stocked",
     stock: 1200,
+    capacity: 4000,
     type: "pcs",
-    status: "Low Stock",
     supplier: "Toraja Coffee Traders",
     image: productImage,
     description:
@@ -76,8 +83,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Espresso Machine",
     category: "Non-Stocked",
     stock: 3,
+    capacity: 3,
     type: "pcs",
-    status: "In Stock",
     supplier: "Barista Tools Ltd",
     image: productImage,
     description:
@@ -89,8 +96,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Coffee Filter Paper",
     category: "Stocked",
     stock: 0,
+    capacity: 1000,
     type: "pcs",
-    status: "Out of Stock",
     supplier: "Clean Brew Supplies",
     image: productImage,
     description:
@@ -102,8 +109,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Robusta Lampung",
     category: "Stocked",
     stock: 800,
+    capacity: 1500,
     type: "pcs",
-    status: "In Stock",
     supplier: "Lampung Coffee Farmers",
     image: productImage,
     description: "Strong and bold Robusta beans from Lampung region.",
@@ -114,8 +121,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Coffee Scoop",
     category: "Non-Stocked",
     stock: 15,
+    capacity: 20,
     type: "pcs",
-    status: "In Stock",
     supplier: "Barista Tools Ltd",
     image: productImage,
     description: "Durable stainless steel scoop for accurate measurement.",
@@ -126,8 +133,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Coffee Bali Kintamani",
     category: "Stocked",
     stock: 1400,
+    capacity: 5000,
     type: "pcs",
-    status: "Low Stock",
     supplier: "Kintamani Collective",
     image: productImage,
     description: "Fruity and aromatic Arabica from Bali highlands.",
@@ -138,8 +145,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Paper Cup 12oz",
     category: "Non-Stocked",
     stock: 0,
+    capacity: 50,
     type: "pcs",
-    status: "Out of Stock",
     supplier: "EcoServe Indonesia",
     image: productImage,
     description: "Biodegradable paper cups for hot and cold drinks.",
@@ -150,8 +157,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Coffee Mug",
     category: "Non-Stocked",
     stock: 20,
+    capacity: 25,
     type: "pcs",
-    status: "In Stock",
     supplier: "Coffee Gear ID",
     image: productImage,
     description: "Ceramic mugs for daily brewing.",
@@ -162,8 +169,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Coffee Mandheling",
     category: "Stocked",
     stock: 600,
+    capacity: 1000,
     type: "pcs",
-    status: "In Stock",
     supplier: "Mandheling Co.",
     image: productImage,
     description:
@@ -175,8 +182,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Espresso Beans",
     category: "Stocked",
     stock: 1500,
+    capacity: 2000,
     type: "pcs",
-    status: "In Stock",
     supplier: "Java Coffee Supply",
     image: productImage,
     description:
@@ -188,8 +195,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Coffee Scale",
     category: "Non-Stocked",
     stock: 5,
+    capacity: 10,
     type: "pcs",
-    status: "Low Stock",
     supplier: "Barista Tools Co.",
     image: productImage,
     description:
@@ -201,8 +208,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Brown Sugar Syrup",
     category: "Stocked",
     stock: 250,
+    capacity: 1000,
     type: "pcs",
-    status: "Low Stock",
     supplier: "SweetBrew Indonesia",
     image: productImage,
     description:
@@ -213,9 +220,9 @@ export const inventoryData: InventoryItem[] = [
     id: 1014,
     productName: "Paper Cups 12oz",
     category: "Stocked",
-    stock: 1200,
+    stock: 200,
+    capacity: 2500,
     type: "pcs",
-    status: "In Stock",
     supplier: "EcoPack Supplies",
     image: productImage,
     description:
@@ -227,8 +234,8 @@ export const inventoryData: InventoryItem[] = [
     productName: "Coffee Filter Machine",
     category: "Non-Stocked",
     stock: 1,
+    capacity: 3,
     type: "pcs",
-    status: "Out of Stock",
     supplier: "TechBrew Systems",
     image: productImage,
     description:

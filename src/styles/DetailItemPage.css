@@ -7,30 +7,6 @@
 
 }
 
-/* ========== SIDEBAR ========== */
-.sidebar {
-  width: 441px;
-  height: 835px;
-  background: var(--white);
-  border-radius: 12px;
-  margin: 20px;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Sidebar Header */
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: none;
-  border-radius: 12px;
-  padding: 8px 12px;
-  margin-bottom: 0px;
-}
-
 /* Tombol Icon Sidebar (Reset Style Dasar) */
 .icon-btn {
   background: transparent;
