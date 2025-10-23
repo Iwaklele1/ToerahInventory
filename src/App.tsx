@@ -16,6 +16,7 @@ function App() {
   const [profileOpen, setProfileOpen] = useState(false);
   const location = useLocation();
 
+  
   // Tentukan judul berdasarkan path
   const getTitle = () => {
     switch (location.pathname) {
@@ -25,10 +26,8 @@ function App() {
         return "Inventory";
       case "/member":
         return "Member";
-      case "/detailitem":
-        return "Detail Item";
       default:
-        return "";
+        return "Detail Item";
     }
   };
 
