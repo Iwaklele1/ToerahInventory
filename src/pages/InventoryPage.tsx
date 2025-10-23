@@ -9,7 +9,9 @@ import { InventoryHook } from "../utils/InventoryHook";
 
 const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"thisMonth" | "custom">("thisMonth");
+  const [filterType, setFilterType] = useState<"thisMonth" | "custom">(
+    "thisMonth"
+  );
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [showFilter, setShowFilter] = useState(false);
@@ -31,6 +33,7 @@ const InventoryPage = () => {
     setNewProduct,
     handleAddNew,
     handleEditMode,
+    setEditingId,
     handleEdit,
   } = InventoryHook();
 
@@ -137,10 +140,16 @@ const InventoryPage = () => {
 
           {/* Buttons */}
           <div className="inventory-action-buttons">
-            <button className={`btn-new ${!isEditMode ? "active" : ""}`} onClick={handleAddNew}>
+            <button
+              className={`btn-new ${!isEditMode ? "active" : ""}`}
+              onClick={handleAddNew}
+            >
               New Product
             </button>
-            <button className={`btn-edit ${isEditMode ? "active" : ""}`} onClick={handleEditMode}>
+            <button
+              className={`btn-edit ${isEditMode ? "active" : ""}`}
+              onClick={handleEditMode}
+            >
               Edit Product
             </button>
           </div>
@@ -165,21 +174,29 @@ const InventoryPage = () => {
             <tbody>
               {displayedData.length > 0 ? (
                 displayedData.map((item) => (
-                  <tr 
-                  key={item.id}
+                  <tr
+                    key={item.id}
                     className="hoverable"
                     onClick={() => navigate(`/detailitem/${item.id}`)}
                     style={{ cursor: "pointer" }}
-                    >
+                  >
                     <td>
-                      <img src={item.image} alt={item.productName} className="inventory-thumb" />
+                      <img
+                        src={item.image}
+                        alt={item.productName}
+                        className="inventory-thumb"
+                      />
                     </td>
-                    <td className="inventory-product-name">{item.productName}</td>
+                    <td className="inventory-product-name">
+                      {item.productName}
+                    </td>
                     <td>{item.id}</td>
                     <td>{item.category}</td>
                     <td>
                       <span
-                        className={`status-badge ${item.status.replace(/\s+/g, "-").toLowerCase()}`}
+                        className={`status-badge ${item.status
+                          .replace(/\s+/g, "-")
+                          .toLowerCase()}`}
                       >
                         {item.status}
                       </span>
@@ -189,7 +206,10 @@ const InventoryPage = () => {
                     {user?.role === "member" && <td>{item.supplier}</td>}
                     {user?.role === "admin" && (
                       <td>
-                        <button className="inventory-delete-btn" onClick={() => handleDelete(item.id)}>
+                        <button
+                          className="inventory-delete-btn"
+                          onClick={() => handleDelete(item.id)}
+                        >
                           Delete
                         </button>
                       </td>
@@ -198,7 +218,10 @@ const InventoryPage = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={8} style={{ textAlign: "center", padding: "1rem" }}>
+                  <td
+                    colSpan={8}
+                    style={{ textAlign: "center", padding: "1rem" }}
+                  >
                     No data found.
                   </td>
                 </tr>
@@ -218,10 +241,14 @@ const InventoryPage = () => {
               <select
                 value={newProduct.id || ""}
                 onChange={(e) => {
+                  const selectedId = Number(e.target.value);
                   const selected = inventoryList.find(
-                    (item) => item.id === Number(e.target.value)
+                    (item) => item.id === selectedId
                   );
-                  if (selected) setNewProduct({ ...selected });
+                  if (selected) {
+                    setNewProduct({ ...selected });
+                    setEditingId(selectedId); // ✅ penting! tambahkan ini
+                  }
                 }}
               >
                 <option value="">Select Product</option>
@@ -251,7 +278,10 @@ const InventoryPage = () => {
             <button
               type="button"
               onClick={() =>
-                setNewProduct({ ...newProduct, stock: Math.max(0, newProduct.stock - 1) })
+                setNewProduct({
+                  ...newProduct,
+                  stock: Math.max(0, newProduct.stock - 1),
+                })
               }
             >
               -
@@ -259,7 +289,9 @@ const InventoryPage = () => {
             <span>{newProduct.stock}</span>
             <button
               type="button"
-              onClick={() => setNewProduct({ ...newProduct, stock: newProduct.stock + 1 })}
+              onClick={() =>
+                setNewProduct({ ...newProduct, stock: newProduct.stock + 1 })
+              }
             >
               +
             </button>
@@ -268,7 +300,9 @@ const InventoryPage = () => {
           <label>Unit Type</label>
           <select
             value={newProduct.type}
-            onChange={(e) => setNewProduct({ ...newProduct, type: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, type: e.target.value })
+            }
           >
             <option value="Pcs">Pcs</option>
             <option value="Kg">Kg</option>
@@ -297,14 +331,18 @@ const InventoryPage = () => {
             type="text"
             placeholder="Enter supplier name"
             value={newProduct.supplier}
-            onChange={(e) => setNewProduct({ ...newProduct, supplier: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, supplier: e.target.value })
+            }
           />
 
           <label>Description</label>
           <textarea
             placeholder="Enter description"
             value={newProduct.description}
-            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, description: e.target.value })
+            }
           />
 
           <label>Image URL</label>
@@ -312,10 +350,14 @@ const InventoryPage = () => {
             type="text"
             placeholder="Enter image URL"
             value={newProduct.image}
-            onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, image: e.target.value })
+            }
           />
 
-          <button type="submit">{isEditMode ? "Update Product" : "Add Product"}</button>
+          <button type="submit">
+            {isEditMode ? "Update Product" : "Add Product"}
+          </button>
         </form>
       </div>
     </div>
