@@ -6,6 +6,7 @@
   --black: #000000;
   --secondary-text-color: #2F2418;
   --tertiary-text-color: #FFF6E5;
+  --searcbar-input: #FFF9F2;
   --dark-brown: #2F2418;
   --full-stock: #4CAF50;
   --out-of-stock: #E53935;
@@ -17,6 +18,10 @@
   --sidebar-background-color: #443627;
   --add-vendor-btn-color: #CC6E00;
   --login-btn-color: #6B4226;
+  --tabel-hover: #F3E2C5;
+  --create-new-vendor: #FFF9F2;
+  --searchbar-input-holder: #FEF7EF;
+  --vendorlink: #2F2418;
 
    /* Typography */
   --font: 'Titillium Web', sans-serif;
@@ -30,5 +35,15 @@ html, body, #root {
 
 body {
   background-color: var(--background-color);
-  box-sizing: border-box;
+  font-family: var(--font);
+  color: var(--black);
+}
+
+.app {
+  padding: 50px 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
 }

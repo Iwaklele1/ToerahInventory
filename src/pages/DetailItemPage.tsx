@@ -21,6 +21,17 @@ const DetailItemPage: React.FC = () => {
   const [showAddVendorModal, setShowAddVendorModal] = useState(false);
   const [showCreateVendorModal, setShowCreateVendorModal] = useState(false);
 
+  // ✅ Tambahan state yang hilang
+  const [vendors, setVendors] = useState([
+    { name: "Cuisine Supply Inc.", link: "https://cuisine.supply.co" },
+    { name: "Bloom Roastery", link: "https://bloomroast.id" },
+  ]);
+
+  const [newVendorName, setNewVendorName] = useState("");
+  const [newVendorLink, setNewVendorLink] = useState("");
+
+  // ================= HANDLERS =================
+
   const handleAddVendor = () => {
     setShowAddVendorModal(true);
   };
@@ -30,13 +41,30 @@ const DetailItemPage: React.FC = () => {
     setShowCreateVendorModal(true);
   };
 
+  const handleSaveVendor = () => {
+    if (!newVendorName.trim()) return alert("Vendor name cannot be empty!");
+
+    const newVendor = {
+      name: newVendorName,
+      link: newVendorLink || "(No Link)",
+    };
+
+    setVendors((prev) => [...prev, newVendor]);
+
+    // Reset & ubah modal
+    setNewVendorName("");
+    setNewVendorLink("");
+    setShowCreateVendorModal(false);
+    setShowAddVendorModal(true);
+  };
+
   const handleToggleSearch = () => {
     setShowSearch(!showSearch);
   };
 
   return (
     <div className="detail-page-container">
-      {/* SIDEBAR */}
+      {/* ================= SIDEBAR ================= */}
       <div className="sidebar">
         <div className="sidebar-header">
           {!showSearch ? (
@@ -86,7 +114,7 @@ const DetailItemPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ========== MAIN CONTENT ========== */}
+      {/* ================= MAIN CONTENT ================= */}
       <div className="detail-content">
         <div className="detail-header">
           <button className="close-btn">
@@ -131,11 +159,11 @@ const DetailItemPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Tabs Section */}
+        {/* ================= TABS ================= */}
         <div className="tabs-container">
           <div className="tabs">
             <button
-              className={tab-button ${activeTab === "vendors" ? "active" : ""}}
+              className={`tab-button ${activeTab === "vendors" ? "active" : ""}`}
               onClick={() => setActiveTab("vendors")}
             >
               <img src={userIcon} alt="vendors" className="icon-tab" />
@@ -143,7 +171,7 @@ const DetailItemPage: React.FC = () => {
             </button>
 
             <button
-              className={tab-button ${activeTab === "history" ? "active" : ""}}
+              className={`tab-button ${activeTab === "history" ? "active" : ""}`}
               onClick={() => setActiveTab("history")}
             >
               <img src={timeIcon} alt="history" className="icon-tab" />
@@ -152,7 +180,7 @@ const DetailItemPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Table Section */}
+        {/* ================= TABLE SECTION ================= */}
         {activeTab === "vendors" ? (
           <div className="detail-item-table-container">
             <table>
@@ -160,26 +188,15 @@ const DetailItemPage: React.FC = () => {
                 <tr>
                   <th>Vendor</th>
                   <th>Vendor Link</th>
-                  <th>Vendor Product Code</th>
-                  <th>Lead Time</th>
-                  <th>Vendor Price</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Cuisine Supply Inc.</td>
-                  <td>https://cuisine.supply.co</td>
-                  <td>240001</td>
-                  <td>10 Days</td>
-                  <td>Rp.100.000,00</td>
-                </tr>
-                <tr>
-                  <td>Bloom Roastery</td>
-                  <td>https://bloomroast.id</td>
-                  <td>240002</td>
-                  <td>8 Days</td>
-                  <td>Rp.98.000,00</td>
-                </tr>
+                {vendors.map((vendor, i) => (
+                  <tr key={i}>
+                    <td>{vendor.name}</td>
+                    <td>{vendor.link}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <button className="add-vendor-btn" onClick={handleAddVendor}>
@@ -229,13 +246,13 @@ const DetailItemPage: React.FC = () => {
 
               {/* Vendor list */}
               <div className="vendor-list">
-                {[1, 2, 3].map((item) => (
-                  <div className="vendor-item" key={item}>
+                {vendors.map((vendor, index) => (
+                  <div className="vendor-item" key={index}>
                     <div className="vendor-info">
                       <img src={userIcon} alt="vendor" className="icon-user-modal" />
                       <div className="vendor-text">
-                        <span className="vendor-name">Product Vendor</span>
-                        <span className="vendor-link">(Vendor Link Optional)</span>
+                        <span className="vendor-name">{vendor.name}</span>
+                        <span className="vendor-link">{vendor.link}</span>
                       </div>
                     </div>
                     <hr />
@@ -264,12 +281,26 @@ const DetailItemPage: React.FC = () => {
 
               <div className="form-group">
                 <label htmlFor="vendorName">Vendor name</label>
-                <input id="vendorName" type="text" placeholder="Enter vendor name" className="input-field" />
+                <input
+                  id="vendorName"
+                  type="text"
+                  placeholder="Enter vendor name"
+                  className="input-field"
+                  value={newVendorName}
+                  onChange={(e) => setNewVendorName(e.target.value)}
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="vendorLink">Vendor link (optional)</label>
-                <input id="vendorLink" type="text" placeholder="Enter vendor link" className="input-field" />
+                <input
+                  id="vendorLink"
+                  type="text"
+                  placeholder="Enter vendor link"
+                  className="input-field"
+                  value={newVendorLink}
+                  onChange={(e) => setNewVendorLink(e.target.value)}
+                />
               </div>
 
               <div className="modal-actions">
@@ -282,11 +313,15 @@ const DetailItemPage: React.FC = () => {
                 >
                   Cancel
                 </button>
-                <button className="create-btn">Create</button>
+                <button className="create-btn" onClick={handleSaveVendor}>
+                  Create
+                </button>
               </div>
             </div>
           </div>
         )}
+
+
       </div>
     </div>
   );
