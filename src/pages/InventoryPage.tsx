@@ -165,11 +165,16 @@ const InventoryPage = () => {
             <tbody>
               {displayedData.length > 0 ? (
                 displayedData.map((item) => (
-                  <tr key={item.id}>
+                  <tr 
+                  key={item.id}
+                    className="hoverable"
+                    onClick={() => navigate(`/detailitem/${item.id}`)}
+                    style={{ cursor: "pointer" }}
+                    >
                     <td>
-                      <img src={item.image} alt={item.productName} className="thumb" />
+                      <img src={item.image} alt={item.productName} className="inventory-thumb" />
                     </td>
-                    <td>{item.productName}</td>
+                    <td className="inventory-product-name">{item.productName}</td>
                     <td>{item.id}</td>
                     <td>{item.category}</td>
                     <td>
@@ -184,7 +189,7 @@ const InventoryPage = () => {
                     {user?.role === "member" && <td>{item.supplier}</td>}
                     {user?.role === "admin" && (
                       <td>
-                        <button className="delete-btn" onClick={() => handleDelete(item.id)}>
+                        <button className="inventory-delete-btn" onClick={() => handleDelete(item.id)}>
                           Delete
                         </button>
                       </td>

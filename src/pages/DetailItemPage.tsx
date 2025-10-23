@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "../styles/DetailItemPage.css";
 
-// Icon hasil export dari Figma
+import {
+  getInventoryFromStorage,
+  getStockStatus,
+} from "../utils/InventoryUtils";
+import type { InventoryItem } from "../data/inventoryData";
+
 import searchIcon from "../assets/IconSearch_detailitem.png";
 import plusIcon from "../assets/IconPlus_detailitem.png";
 import editIcon from "../assets/IconEdit_detailitem.png";
@@ -12,8 +18,7 @@ import DeleteIcon from "../assets/IconDelete_detailitem.png";
 import iconID from "../assets/IconID_detailitem.png";
 import iconProduct from "../assets/IconProduct_detailitem.png";
 import iconCeklis from "../assets/IconCeklis_detailitem.png";
-import iconStcok from "../assets/IconStockedProduct_detailitem.png";
-import productImage from "../assets/Rectangle 62.png";
+import iconStock from "../assets/IconStockedProduct_detailitem.png";
 
 const DetailItemPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"vendors" | "history">("vendors");
@@ -21,7 +26,6 @@ const DetailItemPage: React.FC = () => {
   const [showAddVendorModal, setShowAddVendorModal] = useState(false);
   const [showCreateVendorModal, setShowCreateVendorModal] = useState(false);
 
-  // ✅ Tambahan state yang hilang
   const [vendors, setVendors] = useState([
     { name: "Cuisine Supply Inc.", link: "https://cuisine.supply.co" },
     { name: "Bloom Roastery", link: "https://bloomroast.id" },
@@ -30,12 +34,29 @@ const DetailItemPage: React.FC = () => {
   const [newVendorName, setNewVendorName] = useState("");
   const [newVendorLink, setNewVendorLink] = useState("");
 
-  // ================= HANDLERS =================
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
-  const handleAddVendor = () => {
-    setShowAddVendorModal(true);
-  };
+  // 🔹 Ambil semua data dari localStorage
+  const inventoryList: InventoryItem[] = getInventoryFromStorage();
 
+  // 🔹 Ambil produk sesuai ID dari URL
+  const item = inventoryList.find((i) => i.id === Number(id));
+
+  if (!item) {
+    return (
+      <div className="detail-page-container">
+        <p style={{ textAlign: "center", padding: "2rem" }}>
+          Item not found.
+          <br />
+          <button onClick={() => navigate(-1)}>← Back</button>
+        </p>
+      </div>
+    );
+  }
+
+  // 🔹 Modal handlers
+  const handleAddVendor = () => setShowAddVendorModal(true);
   const handleCreateVendor = () => {
     setShowAddVendorModal(false);
     setShowCreateVendorModal(true);
@@ -43,71 +64,72 @@ const DetailItemPage: React.FC = () => {
 
   const handleSaveVendor = () => {
     if (!newVendorName.trim()) return alert("Vendor name cannot be empty!");
-
     const newVendor = {
       name: newVendorName,
       link: newVendorLink || "(No Link)",
     };
-
     setVendors((prev) => [...prev, newVendor]);
-
-    // Reset & ubah modal
     setNewVendorName("");
     setNewVendorLink("");
     setShowCreateVendorModal(false);
     setShowAddVendorModal(true);
   };
 
-  const handleToggleSearch = () => {
-    setShowSearch(!showSearch);
-  };
-
   return (
     <div className="detail-page-container">
       {/* ================= SIDEBAR ================= */}
-      <div className="sidebar">
-        <div className="sidebar-header">
+      <div className="item-sidebar">
+        <div className="item-sidebar-header">
           {!showSearch ? (
             <>
-              {/* Tombol kiri - Search */}
-              <button className="icon-btn left" onClick={handleToggleSearch}>
-                <img src={searchIcon} alt="search" className="icon-search" />
+              <button
+                className="item-icon-btn left"
+                onClick={() => setShowSearch(!showSearch)}
+              >
+                <img src={searchIcon} alt="search" />
               </button>
-
-              {/* Tombol kanan - Add & Edit */}
-              <div className="right-icons">
-                <button className="icon-btn">
-                  <img src={plusIcon} alt="add" className="icon-plus" />
+              <div className="item-right-icons">
+                <button className="item-icon-btn">
+                  <img src={plusIcon} alt="add" />
                 </button>
-                <button className="icon-btn">
-                  <img src={editIcon} alt="edit" className="icon-edit" />
+                <button className="item-icon-btn">
+                  <img src={editIcon} alt="edit" />
                 </button>
               </div>
             </>
           ) : (
-            // Mode Search Aktif
-            <div className="search-bar active">
+            <div className="item-search-bar active">
               <input type="text" placeholder="Search product..." autoFocus />
-              <button className="delete" onClick={handleToggleSearch}>
-                <img src={DeleteIcon} alt="delete" className="icon-delete" />
+              <button
+                className="item-delete"
+                onClick={() => setShowSearch(false)}
+              >
+                <img src={DeleteIcon} alt="delete" />
               </button>
             </div>
           )}
         </div>
 
-        {/* Daftar Produk di Sidebar */}
+        {/* 🔹 Product List Sidebar */}
         <div className="product-list">
           <h4>
             <b>Product List</b>
           </h4>
-          {[1, 2, 3, 4, 5].map((item) => (
-            <div className="product-item" key={item}>
+
+          {inventoryList.map((product) => (
+            <div
+              className={`product-item ${
+                product.id === Number(id) ? "active" : ""
+              }`}
+              key={product.id}
+              onClick={() => navigate(`/detailitem/${product.id}`)}
+            >
               <div className="product-thumb">
-                <img src={productImage} alt="Product" />
+                <img src={product.image} alt={product.productName} />
               </div>
               <div className="product-info-mini">
-                <p className="product-title">Coffee Gayo</p>
-                <span className="product-id">#10000{item}</span>
+                <p className="product-title">{product.productName}</p>
+                <span className="product-id">#{product.id}</span>
               </div>
             </div>
           ))}
@@ -117,43 +139,45 @@ const DetailItemPage: React.FC = () => {
       {/* ================= MAIN CONTENT ================= */}
       <div className="detail-content">
         <div className="detail-header">
-          <button className="close-btn">
-            <img src={closeIcon} alt="close" className="icon-close" />
+          <button className="item-close-btn" onClick={() => navigate(-1)}>
+            <img src={closeIcon} alt="close" />
           </button>
-          <h3>The Bloom Coffee - Sakura 1 Pack 10 Gr</h3>
+          <h3>{item.productName}</h3>
         </div>
 
         <div className="detail-body">
-          <img src={productImage} alt="Product" className="product-image" />
+          <img src={item.image} alt={item.productName} className="product-image" />
 
           <div className="product-info">
-            <p className="product-desc">
-              Kopi premium dalam kemasan praktis sekali seduh yang menghadirkan aroma floral lembut
-              dengan aftertaste manis khas bunga sakura. Diproses dari biji pilihan dan dikemas
-              kedap udara, cocok untuk penikmat keseimbangan rasa elegan dalam setiap cangkir.
-            </p>
+            <p className="product-desc">{item.description}</p>
 
             <div className="product-details">
               <div className="detail-item">
-                <img src={iconID} alt="ID Icon" className="icon-id" />
-                <span className="value">100001</span>
+                <img src={iconID} alt="ID Icon" />
+                <span className="value">{item.id}</span>
               </div>
 
               <div className="detail-item">
-                <img src={iconCeklis} alt="Checklist Icon" className="icon-checklist" />
-                <span className="value">
-                  <span className="detail-item status low">Low Stock</span>
+                <img src={iconCeklis} alt="Checklist Icon" />
+                <span
+                  className={`status ${item.status
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`}
+                >
+                  {item.status}
                 </span>
               </div>
 
               <div className="detail-item">
-                <img src={iconStcok} alt="Stock Icon" className="icon-stocked" />
-                <span className="label">Stocked Product</span>
+                <img src={iconStock} alt="Stock Icon" />
+                <span className="label">{item.category}</span>
               </div>
 
               <div className="detail-item">
-                <img src={iconProduct} alt="Product Icon" className="icon-product" />
-                <span className="label">100 Kg</span>
+                <img src={iconProduct} alt="Product Icon" />
+                <span className="label">
+                  {item.stock} {item.type}
+                </span>
               </div>
             </div>
           </div>
@@ -163,7 +187,9 @@ const DetailItemPage: React.FC = () => {
         <div className="tabs-container">
           <div className="tabs">
             <button
-              className={`tab-button ${activeTab === "vendors" ? "active" : ""}`}
+              className={`tab-button ${
+                activeTab === "vendors" ? "active" : ""
+              }`}
               onClick={() => setActiveTab("vendors")}
             >
               <img src={userIcon} alt="vendors" className="icon-tab" />
@@ -171,7 +197,9 @@ const DetailItemPage: React.FC = () => {
             </button>
 
             <button
-              className={`tab-button ${activeTab === "history" ? "active" : ""}`}
+              className={`tab-button ${
+                activeTab === "history" ? "active" : ""
+              }`}
               onClick={() => setActiveTab("history")}
             >
               <img src={timeIcon} alt="history" className="icon-tab" />
@@ -231,97 +259,6 @@ const DetailItemPage: React.FC = () => {
             </table>
           </div>
         )}
-
-        {/* ================= MODAL ADD VENDOR ================= */}
-        {showAddVendorModal && (
-          <div className="modal-overlay">
-            <div className="modal add-vendor-modal">
-              <h3>Add vendor to product</h3>
-
-              {/* Search bar */}
-              <div className="search-bar">
-                <input type="text" placeholder="Search" />
-                <img src={searchIcon} alt="search" className="icon-search-modal" />
-              </div>
-
-              {/* Vendor list */}
-              <div className="vendor-list">
-                {vendors.map((vendor, index) => (
-                  <div className="vendor-item" key={index}>
-                    <div className="vendor-info">
-                      <img src={userIcon} alt="vendor" className="icon-user-modal" />
-                      <div className="vendor-text">
-                        <span className="vendor-name">{vendor.name}</span>
-                        <span className="vendor-link">{vendor.link}</span>
-                      </div>
-                    </div>
-                    <hr />
-                  </div>
-                ))}
-              </div>
-
-              {/* Footer buttons */}
-              <div className="modal-footer">
-                <button className="create-new-btn" onClick={handleCreateVendor}>
-                  ＋ Create new vendor
-                </button>
-                <button className="cancel-btn" onClick={() => setShowAddVendorModal(false)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ================= MODAL CREATE VENDOR ================= */}
-        {showCreateVendorModal && (
-          <div className="modal-overlay">
-            <div className="modal create-vendor-modal">
-              <h3>Create a new vendor</h3>
-
-              <div className="form-group">
-                <label htmlFor="vendorName">Vendor name</label>
-                <input
-                  id="vendorName"
-                  type="text"
-                  placeholder="Enter vendor name"
-                  className="input-field"
-                  value={newVendorName}
-                  onChange={(e) => setNewVendorName(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="vendorLink">Vendor link (optional)</label>
-                <input
-                  id="vendorLink"
-                  type="text"
-                  placeholder="Enter vendor link"
-                  className="input-field"
-                  value={newVendorLink}
-                  onChange={(e) => setNewVendorLink(e.target.value)}
-                />
-              </div>
-
-              <div className="modal-actions">
-                <button
-                  className="cancel-btn"
-                  onClick={() => {
-                    setShowCreateVendorModal(false);
-                    setShowAddVendorModal(true);
-                  }}
-                >
-                  Cancel
-                </button>
-                <button className="create-btn" onClick={handleSaveVendor}>
-                  Create
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-
       </div>
     </div>
   );

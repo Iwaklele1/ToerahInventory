@@ -1,14 +1,38 @@
 /* ========== GLOBAL ========== */
 .detail-page-container {
   display: flex;
-  height: 100vh;
   font-family: var(--font);
-  overflow: hidden;
+  overflow-y: hidden;
+  flex-direction: row;
+  gap: 25px;
+  padding: 50px 90px;
+}
 
+/* ========== SIDEBAR ========== */
+.item-sidebar {
+  width: 441px;
+  height: 785px;
+  background: var(--white);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar Header */
+.item-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: none;
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 0px;
 }
 
 /* Tombol Icon Sidebar (Reset Style Dasar) */
-.icon-btn {
+.item-icon-btn {
   background: transparent;
   border: none;
   color: inherit;
@@ -16,49 +40,49 @@
   padding: 6px;
   cursor: pointer;
 }
-.icon-btn:hover {
+.item-icon-btn:hover {
   background: transparent;
 }
 
 /* Icon Khusus */
-.icon-search {
+.item-icon-search {
   width: 50px;
   height: 50px;
   background: transparent !important;
 }
 
-.icon-search-bar {
+.item-icon-search-bar {
   width: 24px;
   height: 24px;
   background: transparent !important;
 }
 
-.icon-plus {
+.item-icon-plus {
   width: 50px;
   height: 50px;
   background: transparent !important;
 }
 
-.icon-edit {
+.item-icon-edit {
   width: 50px;
   height: 50px;
   background: transparent !important;
 }
 
-.icon-delete {
+.item-icon-delete {
   width: 18px;
   height: 18px;
   background: transparent !important;
   filter: none;  
 }
 
-.icon-close {
+.item-icon-close {
   width: 50px;
   height: 50px;
   background: transparent !important;
 }
 
-.icon-id {
+.item-icon-id {
   width: 24px;
   height: 24px;
   object-fit: contain;
@@ -66,14 +90,14 @@
   background: none;
 }
 
-.icon-product {
+.item-icon-product {
   width: 26px;
   height: 26px;
   object-fit: contain;
   margin-right: 8px;
 }
 
-.icon-checklist {
+.item-icon-checklist {
   width: 22px;
   height: 22px;
   object-fit: contain;
@@ -81,7 +105,7 @@
 }
 
 
-.icon-stocked {
+.item-icon-stocked {
   width: 24px;
   height: 24px;
   object-fit: contain;
@@ -89,9 +113,9 @@
 }
 
 
-.menu-btn,
-.add-btn,
-.search-toggle {
+.item-menu-btn,
+.item-add-btn,
+.item-search-toggle {
   color: var(--white);
   border: none;
   border-radius: 8px;
@@ -99,7 +123,7 @@
   transition: transform 0.2s ease;
 }
 /* ==================== SEARCH BAR ==================== */
-.search-bar {
+.item-search-bar {
   position: relative;
   display: flex;
   align-items: center;
@@ -113,7 +137,7 @@
 }
 
 /* Input di dalam search bar */
-.search-bar input {
+.item-search-bar input {
   flex: 1;
   border: none;
   outline: none;
@@ -123,7 +147,7 @@
 }
 
 /* Tombol hapus (ikon X) */
-.search-bar .delete {
+.item-search-bar .item-delete {
   background: none;
   border: none;
   cursor: pointer;
@@ -135,7 +159,7 @@
 }
 
 /* Ikon search */
-.icon-search-modal {
+.item-icon-search-modal {
   position: absolute;
   right: 16px;
   width: 18px;
@@ -144,7 +168,7 @@
 }
 
 /* Saat aktif — biar animasinya smooth */
-.search-bar.active {
+.item-search-bar.active {
   border-color: var(--black);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
 }
@@ -156,18 +180,17 @@
   overflow-y: auto;
   flex: 1;
   font-size: 18px;
-  
-
+  padding-right: 15px;
 }
 .product-list h4 {
   margin-bottom: 15px;
-  font-size: 18px;
+  font-size: 24px;
   background: var(--primary-orange-color);
   color: var(--black);
   padding: 15px 50px;
   border-radius: 50px;
   font-weight: 500;
-  margin-top: 0;
+  margin: 0;
   border-color: var(--black);
 }
 
@@ -211,15 +234,14 @@
 /* ========== DETAIL PAGE CONTENT ========== */
 .detail-content {
   flex: 1;
-  margin: 20px;
   background: var(--white);
   border-radius: 16px;
-  padding: 27px;
+  padding: 25px 25px 0;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   width: 1247px;
-  height: 810px;
+  height: 790px;
   overflow-y: auto; /* aktifkan scroll di area ini */
 }
 
@@ -234,6 +256,19 @@
 }
 
 .detail-content::-webkit-scrollbar-thumb:hover {
+  background: #e69500;
+}
+
+.product-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.product-list::-webkit-scrollbar-thumb {
+  background: var(--primary-orange-color);
+  border-radius: 10px;
+}
+
+.product-list::-webkit-scrollbar-thumb:hover {
   background: #e69500;
 }
 
@@ -271,7 +306,13 @@
   border-radius: 10px;
 }
 
-.close-btn {
+.detail-header h3 {
+  font-size: 28px;
+  color: var(--black);
+  margin: 0;
+}
+
+.item-close-btn {
   background: none;
   border: none;
   color: var(--white);

@@ -317,7 +317,6 @@
 .inventory-table th:nth-child(2),
 .inventory-table td:nth-child(2) {
   width: 200px;
-  padding: 0;
 }
 .inventory-table th:nth-child(3),
 .inventory-table td:nth-child(3) {
@@ -356,7 +355,7 @@
 
 
 /* ===== PRODUCT CELL (Gambar + Nama) ===== */
-.product-cell {
+.inventory-product-cell {
   display: flex;
   align-items: center;
   gap: 18px; /* jarak antara gambar dan nama */
@@ -364,7 +363,7 @@
 }
 
 /* ===== PRODUCT IMAGE ===== */
-.product-thumb {
+.inventory-thumb {
   width: 55px;
   height: 55px;
   border-radius: 10px;
@@ -376,14 +375,14 @@
   background-color: var(--white);
 }
 
-.product-thumb img {
+.inventory-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* ===== PRODUCT NAME ===== */
-.product-name {
+.inventory-product-name {
   font-weight: 600;
   color: var(--black);
   white-space: nowrap;
@@ -391,7 +390,7 @@
 
 
 /* ===== DELETE BUTTON ===== */
-.delete-btn {
+.inventory-delete-btn {
   width: 150px;
   height: 44px;
   background-color: var(--btn-color);
@@ -407,7 +406,7 @@
   justify-content: center;
 }
 
-.delete-btn:hover {
+.inventory-delete-btn:hover {
   background-color: var(--cancel-btn-color);
   transform: scale(1.03);
 }

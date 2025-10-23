@@ -86,7 +86,7 @@ function App() {
           }
         />
         <Route
-          path="/detailitem"
+          path="/detailitem/:id"
           element={
             <ProtectedRoute>
               <DetailItemPage />
