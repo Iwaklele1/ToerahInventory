@@ -11,20 +11,20 @@
 
 /* ===== Left Section ===== */
 .left-section {
+  height: 860px;
   display: flex;
   flex-direction: column;
   width: 572px; /* biar sama dengan lebar chart & box besar */
-  gap: 50px;
 }
 
 /* Pie Chart Card */
 .chart-card {
   background: var(--white);
   border-radius: 25px;
-  height: 400px;
+  height: 466px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin: 0;
-  padding: 0 25px;
+  margin-bottom: 50px;
+  padding: 30px 30px 0 30px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -43,15 +43,33 @@
   background-color: var(--full-stock);
   border-radius: 25px;
   display: flex;
-
   align-items: center;
   justify-content: center;
   gap: 25px;
-
   color: var(--white);
-  padding: 25px;
   box-sizing: border-box;
   cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.main-item-teks {
+  gap: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.main-item.status {
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+  font-weight: 700;
+}
+
+.main-item.number {
+  font-size: 36px;
+  font-weight: 600;
+  margin-top: -10px;
 }
 
 /* Dua kotak kecil di bawahnya (red dan yellow) */
@@ -63,14 +81,13 @@
 
 .main-item.small {
   width: 270px;
-  height: 157px;
+  height: 152px;
   border-radius: 25px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 15px;
   color: var(--white);
-  padding: 25px;
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -94,11 +111,13 @@
 
 .main-item h2 {
   font-size: 28px;
-  margin: 5px 0 0 0;
+  margin: -5px 0 0 0;
+  font-weight: 600;
 }
 
 .main-item p {
   font-size: 16px;
+  font-weight: 700;
   margin: 0;
 }
 
@@ -106,7 +125,7 @@
 .right-section {
   background-color: var(--white);
   border-radius: 25px;
-  padding: 25px;
+  padding: 50px 25px;
   width: 1114px; /* biar tabel nggak ketarik */
   height: 820px; /* sesuai permintaanmu */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -119,15 +138,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.home-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  position: relative;
+}
+
+.home-search-container input {
+  width: 280px;
+  height: 45px;
+  border: 2px solid var(--search-border-color);
+  border-radius: 25px;
+  font-size: 18px;
+  padding: 0 0 0 35px;
+  margin: 0;
+}
+
+
+.home-search-container img {
+  z-index: 2;
+  position: absolute;
+  right: 35px;
 }
 
 .btn-30days {
   background-color: var(--secondary-text-color);
   color: var(--white);
   border: none;
-  border-radius: 10px;
+  border-radius: 25px;
   padding: 8px 15px;
   width: 175px;
   height: 45px;
@@ -240,34 +283,30 @@
 }
 
 /* ===== PRODUCT CELL (Gambar + Nama) ===== */
-.product-cell {
-  display: flex;
-  align-items: center;
-  gap: 18px; /* jarak antara gambar dan nama */
-  padding-left: 12px; /* biar gak terlalu nempel kiri */
-}
+
 
 /* ===== PRODUCT IMAGE ===== */
-.product-thumb {
+.home-product-thumb {
   width: 55px;
   height: 55px;
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
   flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--white);
+  border: 2px solid var(--dark-brown);
 }
 
-.product-thumb img {
+.home-product-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* ===== PRODUCT NAME ===== */
-.product-name {
+.home-product-name {
   font-weight: 500;
   color: #111;
   white-space: nowrap;
@@ -321,35 +360,6 @@
 .home-table th:nth-child(6),
 .home-table td:nth-child(6) {
   width: 200px;
-}
-
-.search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  width: 319px;
-  height: 30px;
-  padding: 8px 35px 8px 12px; /* Tambah ruang di kanan buat ikon */
-  border: 2px solid var(--search-border-color);
-  border-radius: 25px;
-  font-size: 18px;
-  outline: none;
-}
-
-.search-icon {
-  position: absolute;
-  right: 16px; /* pas di kanan */
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.search-icon:hover {
-  opacity: 1;
 }
 
 /* ===== Responsiveness ===== */

@@ -34,7 +34,7 @@ export function InventoryHook() {
     type: "Pcs",
     status: "In Stock",
     supplier: "",
-    image: "/images/default.png",
+    image: "/src/assets/Rectangle%2062.png",
     description: "",
     lastUpdated: new Date().toISOString().split("T")[0],
   });
