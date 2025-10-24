@@ -4,9 +4,11 @@ import "../styles/InventoryPage.css";
 import { useNavigate } from "react-router-dom";
 import iconFilter from "../assets/IconFilter_inventorypage.png";
 import iconSearch from "../assets/IconSearch_inventorypage.png";
-import warningSign from "../assets/WarningSign_memberpage.png"; // ✅ perbaikan import gambar
+import warningSign from "../assets/WarningSign_memberpage.png";
 import { filterInventoryByDate } from "../utils/InventoryUtils";
 import { InventoryHook } from "../utils/InventoryHook";
+import { sendTelegramNotification } from "../utils/TelegramUtils";
+import type { InventoryItem } from "../data/inventoryData";
 
 const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,7 +18,6 @@ const InventoryPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
 
-  // ✅ untuk modal konfirmasi delete
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
@@ -25,8 +26,8 @@ const InventoryPage = () => {
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
+  const username = user?.username ?? user?.name ?? user?.role ?? "Unknown User";
 
-  // ambil semua logic dari hook
   const {
     inventoryList,
     newProduct,
@@ -37,18 +38,11 @@ const InventoryPage = () => {
     setNewProduct,
     handleAddNew,
     handleEditMode,
+    editingId,
+    setEditingId,
+    resetForm,
   } = InventoryHook();
 
-  // ✅ fungsi konfirmasi delete
-  const handleConfirmDelete = () => {
-    if (selectedItemId !== null) {
-      handleDelete(selectedItemId);
-      setSelectedItemId(null);
-      setShowConfirm(false);
-    }
-  };
-
-  // filter + search
   const filteredData =
     filterType === "custom"
       ? filterInventoryByDate(inventoryList, fromDate, toDate)
@@ -58,13 +52,77 @@ const InventoryPage = () => {
     item.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const getProductChanges = (oldItem: InventoryItem, newItem: InventoryItem) => {
+    const changes: string[] = [];
+    if (oldItem.productName !== newItem.productName)
+      changes.push(`Nama: ${oldItem.productName} ➝ ${newItem.productName}`);
+    if (oldItem.stock !== newItem.stock)
+      changes.push(`Stok: ${oldItem.stock} ➝ ${newItem.stock}`);
+    if (oldItem.capacity !== newItem.capacity)
+      changes.push(`Capacity: ${oldItem.capacity} ➝ ${newItem.capacity}`);
+    if (oldItem.type !== newItem.type)
+      changes.push(`Unit: ${oldItem.type} ➝ ${newItem.type}`);
+    if (oldItem.category !== newItem.category)
+      changes.push(`Kategori: ${oldItem.category} ➝ ${newItem.category}`);
+    if ((oldItem.supplier ?? "") !== (newItem.supplier ?? ""))
+      changes.push(`Supplier: ${oldItem.supplier || "-"} ➝ ${newItem.supplier || "-"}`);
+    if ((oldItem.description ?? "") !== (newItem.description ?? ""))
+      changes.push(`Deskripsi: ${oldItem.description || "-"} ➝ ${newItem.description || "-"}`);
+    if ((oldItem.image ?? "") !== (newItem.image ?? "")) changes.push(`Gambar: diubah`);
+    return changes.length > 0 ? changes.join("\n") : "Tidak ada perubahan yang signifikan.";
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const now = new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" });
+
+    if (isEditMode && editingId !== null) {
+      const oldItem = inventoryList.find((i) => i.id === editingId);
+      if (!oldItem) return;
+
+      // jalankan update
+      await handleUpdateProduct(e);
+
+      // bandingkan dan kirim detail perubahan
+      const changes = getProductChanges(oldItem, newProduct);
+      await sendTelegramNotification(
+        `✏️ <b>${escapeHtml(username)}</b> mengedit produk: <b>${escapeHtml(newProduct.productName)}</b>\n\nPerubahan:\n${changes}\n\n📅 ${now}`
+      );
+    } else {
+      // tambah produk baru
+      await handleAddProduct(e);
+
+      await sendTelegramNotification(
+        `🆕 <b>${escapeHtml(username)}</b> menambahkan produk baru:\n\n` +
+          `Nama: ${escapeHtml(newProduct.productName)}\n` +
+          `Stok: ${newProduct.stock} ${escapeHtml(newProduct.type)}\n` +
+          `Capacity: ${newProduct.capacity}\n` +
+          `Kategori: ${escapeHtml(newProduct.category)}\n` +
+          `Supplier: ${escapeHtml(newProduct.supplier || "-")}\n` +
+          `Deskripsi: ${escapeHtml(newProduct.description || "-")}\n` +
+          `📅 ${now}`
+      );
+    }
+
+    resetForm();
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedItemId === null) return;
+    const deletedItem = inventoryList.find((i) => i.id === selectedItemId);
+    await handleDelete(selectedItemId);
+    setShowConfirm(false);
+    setSelectedItemId(null);
+
+  };
+
   return (
     <div className="inventory-main">
       {/* Left Side */}
       <div className="inventory-container">
         <div className="inventory-top">
           <div className="inventory-search-filter-group">
-            {/* Search */}
             <div className="inventory-search-container">
               <input
                 type="text"
@@ -75,7 +133,6 @@ const InventoryPage = () => {
               <img src={iconSearch} alt="search" className="search-icon" />
             </div>
 
-            {/* Filter */}
             <div className="inventory-filter-wrapper" ref={filterRef}>
               <img
                 src={iconFilter}
@@ -104,41 +161,17 @@ const InventoryPage = () => {
                   >
                     Custom
                   </button>
-
                   {showCustom && (
                     <div className="custom-filter">
                       <label htmlFor="from-date">From</label>
-                      <input
-                        id="from-date"
-                        type="date"
-                        value={fromDate}
-                        onChange={(e) => setFromDate(e.target.value)}
-                      />
-
+                      <input id="from-date" type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
                       <label htmlFor="to-date">To</label>
-                      <input
-                        id="to-date"
-                        type="date"
-                        value={toDate}
-                        onChange={(e) => setToDate(e.target.value)}
-                      />
-
+                      <input id="to-date" type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} />
                       <div className="filter-actions">
-                        <button
-                          type="button"
-                          className="clear-btn"
-                          onClick={() => {
-                            setFromDate("");
-                            setToDate("");
-                          }}
-                        >
+                        <button type="button" className="clear-btn" onClick={() => { setFromDate(""); setToDate(""); }}>
                           Clear
                         </button>
-                        <button
-                          type="button"
-                          className="apply-btn"
-                          onClick={() => setShowFilter(false)}
-                        >
+                        <button type="button" className="apply-btn" onClick={() => setShowFilter(false)}>
                           Apply
                         </button>
                       </div>
@@ -149,18 +182,11 @@ const InventoryPage = () => {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="inventory-action-buttons">
-            <button
-              className={`btn-new ${!isEditMode ? "active" : ""}`}
-              onClick={handleAddNew}
-            >
+            <button className={`btn-new ${!isEditMode ? "active" : ""}`} onClick={handleAddNew}>
               New Product
             </button>
-            <button
-              className={`btn-edit ${isEditMode ? "active" : ""}`}
-              onClick={handleEditMode}
-            >
+            <button className={`btn-edit ${isEditMode ? "active" : ""}`} onClick={handleEditMode}>
               Edit Product
             </button>
           </div>
@@ -185,32 +211,15 @@ const InventoryPage = () => {
             <tbody>
               {displayedData.length > 0 ? (
                 displayedData.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="hoverable"
-                    onClick={() => navigate(`/detailitem/${item.id}`)}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <tr key={item.id} className="hoverable" onClick={() => navigate(`/detailitem/${item.id}`)} style={{ cursor: "pointer" }}>
                     <td>
-                      <img
-                        src={item.image}
-                        alt={item.productName}
-                        className="inventory-thumb"
-                      />
+                      <img src={item.image} alt={item.productName} className="inventory-thumb" />
                     </td>
-                    <td className="inventory-product-name">
-                      {item.productName}
-                    </td>
+                    <td className="inventory-product-name">{item.productName}</td>
                     <td>{item.id}</td>
                     <td>{item.category}</td>
                     <td>
-                      <span
-                        className={`status-badge ${item.status
-                          .replace(/\s+/g, "-")
-                          .toLowerCase()}`}
-                      >
-                        {item.status}
-                      </span>
+                      <span className={`status-badge ${item.status.replace(/\s+/g, "-").toLowerCase()}`}>{item.status}</span>
                     </td>
                     <td>{item.stock}</td>
                     <td>{item.type}</td>
@@ -245,18 +254,14 @@ const InventoryPage = () => {
         </div>
       </div>
 
-      {/* ✅ Modal konfirmasi delete */}
+      {/* Modal konfirmasi delete */}
       {showConfirm && (
         <div className="confirm-overlay">
           <div className="confirm-modal">
             <h4>
-              <img src={warningSign} alt="warnsign" className="warning-icon" />{" "}
-              Are you sure to delete this item?
+              <img src={warningSign} alt="warnsign" className="warning-icon" /> Are you sure to delete this item?
             </h4>
-            <p>
-              This action cannot be undone. This will permanently delete this
-              item and remove our data.
-            </p>
+            <p>This action cannot be undone. This will permanently delete this item and remove our data.</p>
             <div className="confirm-buttons">
               <button className="cancel-btn" onClick={() => setShowConfirm(false)}>
                 No, cancel
@@ -269,25 +274,27 @@ const InventoryPage = () => {
         </div>
       )}
 
-      {/* Right Side */}
+      {/* Right Side - Form */}
       <div className="manage-inventory">
         <h3>{isEditMode ? "Edit Product" : "Add New Product"}</h3>
-        <form onSubmit={isEditMode ? handleUpdateProduct : handleAddProduct}>
+        <form onSubmit={handleSubmit}>
           {isEditMode ? (
             <>
               <label>Select Product</label>
               <select
                 value={newProduct.id || ""}
                 onChange={(e) => {
-                  const selected = inventoryList.find(
-                    (item) => item.id === Number(e.target.value)
-                  );
-                  if (selected) setNewProduct({ ...selected });
+                  const id = Number(e.target.value);
+                  const selected = inventoryList.find((item) => item.id === id);
+                  if (selected) {
+                    setNewProduct(selected);
+                    setEditingId(id); // <-- IMPORTANT: set editingId so update happens instead of add
+                  }
                 }}
               >
                 <option value="">Select Product</option>
-                {inventoryList.map((item) => (
-                  <option key={item.id} value={item.id}>
+                {(inventoryList || []).map((item) => (
+                  <option key={item.id} value={String(item.id)}>
                     {item.id} — {item.productName}
                   </option>
                 ))}
@@ -296,48 +303,19 @@ const InventoryPage = () => {
           ) : (
             <>
               <label>Product Name</label>
-              <input
-                type="text"
-                placeholder="Enter product name"
-                value={newProduct.productName}
-                onChange={(e) =>
-                  setNewProduct({ ...newProduct, productName: e.target.value })
-                }
-              />
+              <input type="text" placeholder="Enter product name" value={newProduct.productName} onChange={(e) => setNewProduct({ ...newProduct, productName: e.target.value })} />
             </>
           )}
 
           <label>Stock</label>
           <div className="quantity-control">
-            <button
-              type="button"
-              onClick={() =>
-                setNewProduct({
-                  ...newProduct,
-                  stock: Math.max(0, newProduct.stock - 1),
-                })
-              }
-            >
-              -
-            </button>
+            <button type="button" onClick={() => setNewProduct({ ...newProduct, stock: Math.max(0, newProduct.stock - 1) })}>-</button>
             <span>{newProduct.stock}</span>
-            <button
-              type="button"
-              onClick={() =>
-                setNewProduct({ ...newProduct, stock: newProduct.stock + 1 })
-              }
-            >
-              +
-            </button>
+            <button type="button" onClick={() => setNewProduct({ ...newProduct, stock: newProduct.stock + 1 })}>+</button>
           </div>
 
           <label>Unit Type</label>
-          <select
-            value={newProduct.type}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, type: e.target.value })
-            }
-          >
+          <select value={newProduct.type} onChange={(e) => setNewProduct({ ...newProduct, type: e.target.value })}>
             <option value="Pcs">Pcs</option>
             <option value="Kg">Kg</option>
             <option value="Gram">Gram</option>
@@ -347,51 +325,21 @@ const InventoryPage = () => {
           </select>
 
           <label>Category</label>
-          <select
-            value={newProduct.category}
-            onChange={(e) =>
-              setNewProduct({
-                ...newProduct,
-                category: e.target.value as "Stocked" | "Non-Stocked",
-              })
-            }
-          >
+          <select value={newProduct.category} onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value as "Stocked" | "Non-Stocked" })}>
             <option value="Stocked">Stocked</option>
             <option value="Non-Stocked">Non-Stocked</option>
           </select>
 
           <label>Supplier</label>
-          <input
-            type="text"
-            placeholder="Enter supplier name"
-            value={newProduct.supplier}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, supplier: e.target.value })
-            }
-          />
+          <input type="text" placeholder="Enter supplier name" value={newProduct.supplier} onChange={(e) => setNewProduct({ ...newProduct, supplier: e.target.value })} />
 
           <label>Description</label>
-          <textarea
-            placeholder="Enter description"
-            value={newProduct.description}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, description: e.target.value })
-            }
-          />
+          <textarea placeholder="Enter description" value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} />
 
           <label>Image URL</label>
-          <input
-            type="text"
-            placeholder="Enter image URL"
-            value={newProduct.image}
-            onChange={(e) =>
-              setNewProduct({ ...newProduct, image: e.target.value })
-            }
-          />
+          <input type="text" placeholder="Enter image URL" value={newProduct.image} onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })} />
 
-          <button type="submit">
-            {isEditMode ? "Update Product" : "Add Product"}
-          </button>
+          <button type="submit">{isEditMode ? "Update Product" : "Add Product"}</button>
         </form>
       </div>
     </div>
@@ -399,3 +347,9 @@ const InventoryPage = () => {
 };
 
 export default InventoryPage;
+
+// helper escapeHtml
+function escapeHtml(str: string) {
+  if (str === null || typeof str === "undefined") return "";
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
