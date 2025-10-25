@@ -111,7 +111,7 @@ const MemberPage: React.FC = () => {
             className="add-member-btn"
             onClick={() => alert("Form di sebelah kanan ➜")}
           >
-            + Add Member
+            Add Member
           </button>
         </div>
 
@@ -164,9 +164,9 @@ const MemberPage: React.FC = () => {
 
       {/* ==================== FORM SECTION ==================== */}
       <div className="form-section">
-        <h3>Add Member Form</h3>
+        <h3>Add New Member</h3>
         <form onSubmit={handleAddMember}>
-          <label>Username</label>
+          <label>Add Username</label>
           <input
             type="text"
             name="username"
@@ -174,7 +174,7 @@ const MemberPage: React.FC = () => {
             onChange={handleChange}
           />
 
-          <label>Telegram ID</label>
+          <label>Add ID Telegram</label>
           <input
             type="text"
             name="telegramId"
@@ -182,7 +182,7 @@ const MemberPage: React.FC = () => {
             onChange={handleChange}
           />
 
-          <label>Email</label>
+          <label>Add Email</label>
           <input
             type="email"
             name="email"
@@ -190,7 +190,7 @@ const MemberPage: React.FC = () => {
             onChange={handleChange}
           />
 
-          <label>Password</label>
+          <label>Add Password</label>
           <input
             type="password"
             name="password"
@@ -198,7 +198,7 @@ const MemberPage: React.FC = () => {
             onChange={handleChange}
           />
 
-          <label>Phone</label>
+          <label>Add Phone Number</label>
           <input
             type="text"
             name="phone"
@@ -207,8 +207,9 @@ const MemberPage: React.FC = () => {
           />
 
           <button type="submit" className="submit-btn">
-            Add Member
+            Submit
           </button>
+
         </form>
       </div>
 
