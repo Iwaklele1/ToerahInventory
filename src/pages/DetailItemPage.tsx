@@ -259,6 +259,94 @@ const DetailItemPage: React.FC = () => {
             </table>
           </div>
         )}
+        {/* ================= MODAL ADD VENDOR ================= */}
+        {showAddVendorModal && (
+          <div className="modal-overlay">
+            <div className="modal add-vendor-modal">
+              <h3>Add vendor to product</h3>
+
+              {/* Search bar */}
+              <div className="item-search-bar">
+                <input type="text" placeholder="Search" />
+                <img src={searchIcon} alt="search" className="item-icon-search-modal" />
+              </div>
+
+              {/* Vendor list */}
+              <div className="vendor-list">
+                {vendors.map((vendor, index) => (
+                  <div className="vendor-item" key={index}>
+                    <div className="vendor-info">
+                      <img src={userIcon} alt="vendor" className="icon-user-modal" />
+                      <div className="vendor-text">
+                        <span className="vendor-name">{vendor.name}</span>
+                        <span className="vendor-link">{vendor.link}</span>
+                      </div>
+                    </div>
+                    <hr />
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer buttons */}
+              <div className="modal-footer">
+                <button className="create-new-btn" onClick={handleCreateVendor}>
+                  ＋ Create new vendor
+                </button>
+                <button className="vendor-cancel-btn" onClick={() => setShowAddVendorModal(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ================= MODAL CREATE VENDOR ================= */}
+        {showCreateVendorModal && (
+          <div className="modal-overlay">
+            <div className=" create-vendor-modal">
+              <h3>Create a new vendor</h3>
+
+              <div className="form-group">
+                <label htmlFor="vendorName">Vendor name</label>
+                <input
+                  id="vendorName"
+                  type="text"
+                  placeholder="Enter vendor name"
+                  className="input-field"
+                  value={newVendorName}
+                  onChange={(e) => setNewVendorName(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="vendorLink">Vendor link (optional)</label>
+                <input
+                  id="vendorLink"
+                  type="text"
+                  placeholder="Enter vendor link"
+                  className="input-field"
+                  value={newVendorLink}
+                  onChange={(e) => setNewVendorLink(e.target.value)}
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button
+                  className="vendor-cancel-cancel-btn"
+                  onClick={() => {
+                    setShowCreateVendorModal(false);
+                    setShowAddVendorModal(true);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button className="create-btn" onClick={handleSaveVendor}>
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
