@@ -162,8 +162,8 @@
 .item-icon-search-modal {
   position: absolute;
   right: 16px;
-  width: 18px;
-  height: 18px;
+  width: 32px;
+  height: 32px;
   opacity: 0.7;
 }
 
@@ -600,7 +600,7 @@
   text-decoration: underline;
 }
 
-.cancel-btn {
+.vendor-cancel-btn {
   background: #a93624;
   color: #fff;
   border: none;
@@ -737,10 +737,10 @@
 }
 
 /* Cancel button */
-.create-vendor-modal .cancel-btn {
-  background: transparent;
+.add-vendor-modal .vendor-cancel-btn {
+  background: var(--cancel-btn-color);
   border: 2px solid #b23a2f;
-  color: #b23a2f;
+  color: var(--white);
   font-size: 15px;
   font-weight: 500;
   padding: 8px 24px;
@@ -749,9 +749,9 @@
   transition: all 0.2s ease;
 }
 
-.create-vendor-modal .cancel-btn:hover {
-  background: #b23a2f;
-  color: #fff;
+.add-vendor-modal .vendor-cancel-btn:hover {
+  background: var(--white);
+  color: var(--cancel-btn-color);
 }
 
 /* Create button */
@@ -770,4 +770,21 @@
 .create-vendor-modal .create-btn:hover {
   background: #2f8a42;
   border-color: #2f8a42;
+}
+
+.vendor-cancel-cancel-btn {
+  background: transparent;
+  border: 2px solid #b23a2f;
+  color: #b23a2f;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vendor-cancel-cancel-btn:hover {
+  background-color: var(--cancel-btn-color);
+  color: var(--white);
 }
