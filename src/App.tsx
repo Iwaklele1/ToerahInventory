@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage";
 import Profile from "./components/Profile";
 import DetailItemPage from "./pages/DetailItemPage";
 
+
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);

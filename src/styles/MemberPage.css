@@ -190,83 +190,87 @@
   background-color: var(--cancel-btn-color);
   transform: scale(1.05);
 }
-
 /* ===================== */
 /* ===== FORM ===== */
 /* ===================== */
 .form-section {
-  flex: 1.3;
-  background-color: var(--white);
-  padding: 25px;
+  background-color: #fff;
   width: 375px;
-  height: 770px;
-  border-radius: 25px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  height: auto;
+  border-radius: 20px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  font-size: 20px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   font-family: var(--font);
+  margin: 0 auto;
+  justify-content: center;
 }
 
+/* Header Orange */
 .form-section h3 {
   background-color: var(--primary-orange-color);
+  color: #2e1e0f;
   text-align: center;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 15px;
   font-size: 18px;
-  font-family: var(--font);
+  font-weight: 700;
+  margin: 0;
+  border-radius: 20px 20px 0 0;
 }
 
+/* Body Form */
 .form-section form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
-  flex: 1;
-  font-size: 18px;
-  font-family: var(--font);
+  padding: 30px 15px;
+  gap: 15px;
 }
 
+/* Label Style */
 .form-section label {
+  font-size: 15px;
   font-weight: 600;
-  font-size: 18px;
-  font-family: var(--font);
+  color: #3a1d0c;
 }
 
-.form-section select,
+/* Input Fields */
 .form-section input {
-  padding: 8px;
-  border: 1px solid #aaa;
-  border-radius: 6px;
+  padding: 10px;
+  border: 1px solid #b4a7a1;
+  border-radius: 8px;
   outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
   font-size: 14px;
-  font-family: var(--font);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-section select:focus,
 .form-section input:focus {
   border-color: var(--primary-orange-color);
-  box-shadow: 0 0 4px rgba(245, 166, 35, 0.3);
+  box-shadow: 0 0 4px rgba(245, 166, 35, 0.4);
 }
 
-.form-section button {
-  margin-top: 10px;
-  background-color: var(--dark-brown);
-  color: var(--white);
-  padding: 10px;
+/* Submit Button */
+
+.form-section button.submit-btn {
+  position: relative;
+  left: 20%;
+  width: 190px;
+  height: 45px;
+  background-color: #3a2a1a;
+  color: white;
+  padding: 10px 0;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
-  font-family: var(--font);
-  font-size: 18px;
+  margin-top: 50px;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
-.form-section button:hover {
-  background-color: var(--dark-brown);
-  transform: scale(1.02);
+.form-section button.submit-btn:hover {
+  background-color: #2b1d10;
+  transform: scale(1.03);
 }
 
 /* ===================== */

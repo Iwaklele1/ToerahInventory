@@ -90,8 +90,8 @@ const HomePage: React.FC = () => {
       <div className="left-section">
         {/* Pie Chart */}
         <div className="chart-card">
-          <h3>Stock Overview</h3>
-          <ResponsiveContainer width="100%" height={350}>
+          <h3>Load Percentage</h3>
+          <ResponsiveContainer width="100%" height={365}>
             <PieChart>
               <Pie
                   data={pieData}
@@ -142,23 +142,23 @@ const HomePage: React.FC = () => {
         <div className="left-section">
           <div className="main-item large green">
             <img src={boxIcon} alt="Box" />
-            <div>
-              <p>In Stock</p>
-              <h2>{summary.inStock}</h2>
+            <div className="main-item-teks">
+              <p className="main-item status">In Stock</p>
+              <p className="main-item number">{summary.inStock}</p>
             </div>
           </div>
 
           <div className="box-row">
             <div className="main-item small yellow">
-              <img src={boxIcon} alt="Box" />
-              <div>
+              <img src={boxIcon} alt="Box" width={53} height={60}/>
+              <div className="main-item-teks">
                 <p>Low Stock</p>
                 <h2>{summary.lowStock}</h2>
               </div>
             </div>
 
             <div className="main-item small red">
-              <img src={boxIcon} alt="Box" />
+              <img src={boxIcon} alt="Box" width={53} height={60} />
               <div>
                 <p>Out of Stock</p>
                 <h2>{summary.outOfStock}</h2>
@@ -171,15 +171,15 @@ const HomePage: React.FC = () => {
       {/* ===== RIGHT SECTION ===== */}
       <div className="right-section">
         <div className="home-header">
-          <div className="search-container">
+          <div className="home-search-container">
             <input
               type="text"
               placeholder="Search"
-              className="search-input"
+              className="home-search-input"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <img src={searchIcon} alt="search" className="search-icon" />
+            <img src={searchIcon} alt="search" className="home-search-icon" />
           </div>
 
           {/* Filter Dropdown */}
@@ -279,8 +279,8 @@ const HomePage: React.FC = () => {
                     onClick={() => navigate(`/detailitem/${item.id}`)}
                     style={{ cursor: "pointer" }}
                   >
-                    <td className="image-cell">
-                      <div className="product-thumb">
+                    <td className="home-image-cell">
+                      <div className="home-product-thumb">
                         <img src={item.image} alt={item.productName} />
                       </div>
                     </td>
